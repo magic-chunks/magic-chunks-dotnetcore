@@ -1,0 +1,123 @@
+﻿{
+  "id": "985284E0-A7D2-4E4D-802C-0A516BFFAADF",
+  "name": "MagicChunks",
+  "friendlyName": "Config transformation",
+  "description": "Transform config file with Magic Chunks",
+  "helpMarkDown": "[More Information](https://github.com/sergeyzwezdin/magic-chunks)",
+  "category": "Utility",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "author": "Sergey Zwezdin",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "demands": [
+    "DotNetFramework"
+  ],
+  "minimumAgentVersion": "1.96.2",
+  "groups": [
+    {
+      "name": "sourcePath",
+      "displayName": "Source",
+      "isExpanded": true
+    },
+    {
+      "name": "targetPath",
+      "displayName": "Target",
+      "isExpanded": false
+    },
+    {
+      "name": "transformation",
+      "displayName": "Transformation",
+      "isExpanded": true
+    }
+  ],
+  "inputs": [
+    {
+      "name": "sourcePath",
+      "type": "filePath",
+      "label": "Path",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "Configuration file path which should be transformed.",
+      "groupName": "sourcePath"
+    },
+    {
+      "name": "fileType",
+      "type": "pickList",
+      "label": "File type",
+      "defaultValue": "auto",
+      "required": true,
+      "helpMarkDown": "Type of the config file: JSON, XML or YAML.",
+      "options": {
+        "auto": "Auto detect",
+        "json": "JSON",
+        "xml": "XML",
+        "yaml": "YAML"
+      },
+      "groupName": "sourcePath"
+    },
+    {
+      "name": "targetPathType",
+      "type": "pickList",
+      "label": "Target",
+      "defaultValue": "source",
+      "required": true,
+      "helpMarkDown": "Place where to put transformation result.",
+      "options": {
+        "source": "Source file",
+        "specific": "Specific path"
+      },
+      "groupName": "targetPath"
+    },
+    {
+      "name": "targetPath",
+      "type": "filePath",
+      "label": "Target path",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "File path where to put transformation result.",
+      "groupName": "targetPath",
+      "visibleRule": "targetPathType = specific"
+    },
+    {
+      "name": "transformationType",
+      "type": "pickList",
+      "label": "Type",
+      "defaultValue": "json",
+      "required": true,
+      "helpMarkDown": "The you will use to define transformations.",
+      "options": {
+        "json": "Inline JSON"
+      },
+      "groupName": "transformation"
+    },
+    {
+      "name": "transformations",
+      "type": "multiLine",
+      "label": "Transformations",
+      "defaultValue": "{\n  \"key1\": \"value1\",\n  \"key2\": \"value2\"\n}",
+      "required": true,
+      "helpMarkDown": "JSON representation of transformation.",
+      "properties": {
+        "resizable": "true",
+        "rows": "10",
+        "maxLength": "2500"
+      },
+      "groupName": "transformation",
+      "visibleRule": "transformationType = json"
+    }
+  ],
+  "instanceNameFormat": "Config transform - $(sourcePath)",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\transform.ps1", 
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

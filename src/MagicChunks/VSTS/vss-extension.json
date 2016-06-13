@@ -1,0 +1,71 @@
+{
+    "manifestVersion": 1,
+    "id": "magic-chunks",
+    "version": "1.0.0",
+    "name": "Magic Chunks",
+    "description": "Easy to use tool to config transformations for JSON, XML and YAML.",
+    "publisher": "sergeyzwezdin",
+    "public": false,
+    "icons": {
+        "default": "icon.png",
+        "large": "icon-large.png"
+    },
+    "scopes": [
+        "vso.build"
+    ],
+    "tags": [
+        "Configuration",
+        "Transform",
+        "JSON",
+        "XML",
+        "YAML",
+        "YML",
+        "web.config",
+        "app.config",
+        "appsetings.json"
+    ],
+    "categories": [
+        "Build and release"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "files": [
+        {
+            "path": "MagicChunks"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "magic.chunks",
+            "type": "ms.vss-distributed-task.task",
+            "description": "Config transform with Magic Chunks",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "MagicChunks"
+            }
+        }
+    ],
+    "links": {
+        "getstarted": {
+            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki/get-started/vso"
+        },
+        "learn": {
+            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki"
+        },
+        "support": {
+            "uri": "https://github.com/sergeyzwezdin/magic-chunks/issues"
+        },
+        "license": {
+            "uri": "https://github.com/sergeyzwezdin/magic-chunks/blob/master/LICENSE"
+        }
+    },
+    "branding": {
+        "color": "#00552e",
+        "theme": "dark"
+    }
+}

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicChunks", "MagicChunks\MagicChunks.csproj", "{25E425CC-4F93-4BDA-90AB-51853CFC54B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicChunks.Tests", "MagicChunks.Tests\MagicChunks.Tests.csproj", "{0754CC29-4350-4F79-AB94-2FFC5EAF3649}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicChunks.Cake", "MagicChunks.Cake\MagicChunks.Cake.csproj", "{46171200-2F05-4582-A2FD-36AE25D67E5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25E425CC-4F93-4BDA-90AB-51853CFC54B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E425CC-4F93-4BDA-90AB-51853CFC54B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E425CC-4F93-4BDA-90AB-51853CFC54B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E425CC-4F93-4BDA-90AB-51853CFC54B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0754CC29-4350-4F79-AB94-2FFC5EAF3649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0754CC29-4350-4F79-AB94-2FFC5EAF3649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0754CC29-4350-4F79-AB94-2FFC5EAF3649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0754CC29-4350-4F79-AB94-2FFC5EAF3649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46171200-2F05-4582-A2FD-36AE25D67E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46171200-2F05-4582-A2FD-36AE25D67E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46171200-2F05-4582-A2FD-36AE25D67E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46171200-2F05-4582-A2FD-36AE25D67E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
