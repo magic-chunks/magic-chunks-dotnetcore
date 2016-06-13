@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/xjr953s29pwwsuq4?svg=true)](https://ci.appveyor.com/project/sergeyzwezdin/hangfire-mongo) [![Nuget version](https://img.shields.io/nuget/v/Hangfire.Mongo.svg)](https://www.nuget.org/packages/HangFire.Mongo)
-
 ![Magic Chunks](assets/title.png)
 
 Easy to use tool to config transformations for JSON, XML and YAML.
@@ -33,8 +31,8 @@ So following transformations could be applied to this config:
 
 ```json
 {
-  'configuration/system.web/compilation/@debug': 'false',
-  'configuration/system.web/authentication/@mode': 'Forms'
+  "configuration/system.web/compilation/@debug": "false",
+  "configuration/system.web/authentication/@mode": "Forms"
 }
 ```
 
@@ -65,7 +63,7 @@ Transformation for the config could be:
 
 ```json
 {
-  'ConnectionStrings/DefaultConnection': 'Data Source=10.0.0.5;Initial Catalog=Db1;Persist Security Info=True'
+  "ConnectionStrings/DefaultConnection": "Data Source=10.0.0.5;Initial Catalog=Db1;Persist Security Info=True"
 }
 ```
 
