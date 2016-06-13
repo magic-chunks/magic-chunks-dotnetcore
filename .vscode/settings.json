@@ -1,0 +1,6 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "markdown.styles": [
+        "file://D:/OpenSource/magic-chunks/.vscode/markdown.css"
+    ]
+}
