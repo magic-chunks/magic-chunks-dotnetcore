@@ -109,3 +109,4 @@ UpgradeLog*.XML
 artifacts/
 src/.vs
 working/
+build/tools/
