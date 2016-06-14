@@ -160,7 +160,7 @@ Task("PackVSTS")
 
         StartPowershellFile(paths.workingDirVSTS + "/_build.ps1", new PowershellSettings {
             WorkingDirectory = paths.workingDirVSTS
-        }.SetFormatOutput());
+        }.SetLogOutput());
     });
 
 
