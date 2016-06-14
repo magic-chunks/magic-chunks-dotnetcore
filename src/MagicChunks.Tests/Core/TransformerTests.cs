@@ -56,7 +56,7 @@ namespace MagicChunks.Tests.Core
     }
   },
   ""d"": ""4""
-}", result);
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace MagicChunks.Tests.Core
     }
   },
   ""d"": ""4""
-}", result);
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -197,7 +197,7 @@ namespace MagicChunks.Tests.Core
     </item>
   </f>
   <d>4</d>
-</xml>", result);
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -286,7 +286,7 @@ namespace MagicChunks.Tests.Core
     </item>
   </f>
   <d>4</d>
-</xml>", result);
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -329,7 +329,7 @@ c:
   b:
     t: 3
 d: 4
-", result);
+", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -372,7 +372,7 @@ c:
   b:
     t: 3
 d: 4
-", result);
+", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]

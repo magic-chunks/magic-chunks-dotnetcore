@@ -90,7 +90,7 @@ namespace MagicChunks.Tests.Documents
     </item>
   </f>
   <d>4</d>
-</xml>", result);
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace MagicChunks.Tests.Documents
       <P>Text2</P>
     </div>
   </BODY>
-</html>", result);
+</html>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]

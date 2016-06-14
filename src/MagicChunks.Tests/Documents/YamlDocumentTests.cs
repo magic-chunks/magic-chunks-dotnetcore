@@ -44,7 +44,7 @@ c:
   b:
     t: 3
 d: 4
-", result.ToLowerInvariant());
+", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]

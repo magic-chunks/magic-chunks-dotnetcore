@@ -53,7 +53,7 @@ namespace MagicChunks.Tests.Documents
     }
   },
   ""d"": ""4""
-}", result.ToLowerInvariant());
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
