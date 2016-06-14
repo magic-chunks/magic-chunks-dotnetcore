@@ -10,7 +10,7 @@ Func<string, string> resolveDirectoryPath = (string source) => MakeAbsolute(Dire
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var version = Argument("versionnumber", "1.0.0");
+var version = Argument("versionnumber", "0.0.0");
 var versionbuild = Argument("versionbuild", "0");
 
 // Variables
@@ -47,6 +47,14 @@ Task("PrepareOutputFolders")
         CopyDirectory(resolveDirectoryPath(paths.root + "/tools"), resolveDirectoryPath(paths.workingDirSources + "/tools"));
         CopyDirectory(resolveDirectoryPath(paths.root + "/nuspecs"), resolveDirectoryPath(paths.workingDirSources + "/nuspecs"));
     });
+
+Task("RestorePackages")
+    .Description("Restore Nuget packages for the project")
+    .IsDependentOn("PrepareOutputFolders")
+    .Does(() => {
+        NuGetRestore(paths.workingDirSolutionPath);
+    });
+
 
 Task("UpdateVersion")
     .Description("Updates version for assembly and packages")
@@ -102,6 +110,7 @@ Task("UpdateVersion")
 Task("Build")
     .Description("Builds sources")
     .IsDependentOn("PrepareOutputFolders")
+    .IsDependentOn("RestorePackages")
     .IsDependentOn("UpdateVersion")
     .Does(() => {
         MSBuild(paths.workingDirSolutionPath, new MSBuildSettings {
@@ -160,5 +169,8 @@ Task("Default")
     .IsDependentOn("Pack");
 
 // Run
+
+Information("Version: " + string.Format("{0}.{1}", version, versionbuild));
+Information("Version: " + string.Format("{0}-{1}", version, versionbuild));
 
 RunTarget(target);

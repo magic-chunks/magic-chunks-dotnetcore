@@ -52,8 +52,8 @@ Param(
     [switch]$SkipToolPackageRestore,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs,
-    [string]$Version,
-    [string]$Build
+    [string]$Version = "0.0.0",
+    [string]$Build = "0"
 )
 
 Write-Host "Preparing to run build script..."
