@@ -72,16 +72,22 @@
     <None Include="Powershell\MagicChunks.psm1" />
     <None Include="VSTS\MagicChunks\task.json" />
     <None Include="VSTS\MagicChunks\transform.ps1" />
+    <None Include="VSTS\overview.md" />
     <None Include="VSTS\vss-extension.json" />
     <None Include="VSTS\_build.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="VSTS\extension-icon.png" />
-    <Content Include="VSTS\icon-large.png" />
-    <Content Include="VSTS\icon.png" />
-    <Content Include="VSTS\icon.svg" />
+    <Content Include="VSTS\images\get-started-2.png" />
+    <Content Include="VSTS\images\get-started-3.png" />
+    <Content Include="VSTS\images\get-started-4.png" />
+    <Content Include="VSTS\images\icon-large.png" />
+    <Content Include="VSTS\images\icon.png" />
+    <Content Include="VSTS\images\icon.svg" />
+    <Content Include="VSTS\images\screenshot1.png" />
+    <Content Include="VSTS\images\screenshot2.png" />
     <Content Include="VSTS\MagicChunks\icon.png" />
     <Content Include="VSTS\MagicChunks\icon.svg" />
+    <Content Include="VSTS\videos\magic-chunks.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
