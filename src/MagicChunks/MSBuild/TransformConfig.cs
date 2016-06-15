@@ -23,7 +23,7 @@ namespace MagicChunks.MSBuild
         {
             bool result = true;
 
-            BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Transofrming file: {Path}", string.Empty,
+            BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Transforming file: {Path}", string.Empty,
                 nameof(TransformConfig), MessageImportance.Normal));
 
             try

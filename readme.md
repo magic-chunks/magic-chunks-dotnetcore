@@ -109,7 +109,7 @@ Format-MagicChunks -path C:\sources\project1\appsettings.json -transformations @
 }
 ```
 
-To transofrm config files you can use any approach you like:
+To transform config files you can use any approach you like:
 
  - [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki)
  - [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki)

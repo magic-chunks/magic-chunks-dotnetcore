@@ -35,7 +35,7 @@ namespace MagicChunks.Cake
         {
             var result = true;
 
-            context.Log.Write(Verbosity.Normal, LogLevel.Information, "Transofrming file: {0}", path);
+            context.Log.Write(Verbosity.Normal, LogLevel.Information, "Transforming file: {0}", path);
 
             try
             {

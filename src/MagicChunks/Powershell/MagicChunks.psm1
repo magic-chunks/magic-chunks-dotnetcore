@@ -20,7 +20,7 @@
     PROCESS {
         [System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\MagicChunks.dll") | Out-Null
 
-        Write-Host "Transofrming file $($path)"
+        Write-Host "Transforming file $($path)"
 
         try {
             $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection `
