@@ -7,8 +7,8 @@
     "publisher": "sergeyzwezdin",
     "public": false,
     "icons": {
-        "default": "icon.png",
-        "large": "icon-large.png"
+        "default": "images/icon.png",
+        "large": "images/icon-large.png"
     },
     "scopes": [
         "vso.build"
@@ -35,6 +35,14 @@
     "files": [
         {
             "path": "MagicChunks"
+        },
+        {
+            "path": "images",
+            "addressable": true
+        },
+        {
+            "path": "videos",
+            "addressable": true
         }
     ],
     "contributions": [
@@ -48,6 +56,19 @@
             "properties": {
                 "name": "MagicChunks"
             }
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "overview.md"
+        }
+    },
+    "screenshots": [
+        {
+            "path": "images/screenshot1.png"
+        },
+        {
+            "path": "images/screenshot2.png"
         }
     ],
     "links": {
