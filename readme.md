@@ -1,3 +1,5 @@
+[![AppVeyor](https://img.shields.io/appveyor/ci/sergeyzwezdin/magic-chunks/master.svg?maxAge=2592000)](https://ci.appveyor.com/project/sergeyzwezdin/magic-chunks) [![Github Releases](https://img.shields.io/github/downloads/sergeyzwezdin/magic-chunks/total.svg?maxAge=2592000)](https://github.com/sergeyzwezdin/magic-chunks/releases)[![NuGet](https://img.shields.io/nuget/v/MagicChunks.svg?maxAge=2592000)](https://www.nuget.org/packages/MagicChunks/)[![Visual Studio Marketplace](https://img.shields.io/badge/VS%20Marketplace-1.0.0-yellowgreen.svg)](https://marketplace.visualstudio.com/items?itemName=sergeyzwezdin.magic-chunks)
+
 ![Magic Chunks](assets/title.png)
 
 Easy to use tool to config transformations for JSON, XML and YAML.
