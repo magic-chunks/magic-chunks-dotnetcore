@@ -50,14 +50,14 @@
       "name": "fileType",
       "type": "pickList",
       "label": "File type",
-      "defaultValue": "auto",
+      "defaultValue": "Auto",
       "required": true,
       "helpMarkDown": "Type of the config file: JSON, XML or YAML.",
       "options": {
-        "auto": "Auto detect",
-        "json": "JSON",
-        "xml": "XML",
-        "yaml": "YAML"
+        "Auto": "Auto detect",
+        "Json": "JSON",
+        "Xml": "XML",
+        "Yaml": "YAML"
       },
       "groupName": "sourcePath"
     },

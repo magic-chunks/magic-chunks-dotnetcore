@@ -38,7 +38,7 @@ try {
         $target = $targetPath;
     }
 
-    [MagicChunks.TransformTask]::Transform(($fileType, $null)[[string]::IsNullOrWhitespace($fileType) -or ($fileType -eq "auto")], $sourcePath, $target, $transforms)
+    [MagicChunks.TransformTask]::Transform(($fileType, $null)[[string]::IsNullOrWhitespace($fileType) -or ($fileType -eq "Auto")], $sourcePath, $target, $transforms)
 
     Write-Host "File transformed to $($target)"
 }

@@ -11,8 +11,9 @@ namespace MagicChunks.Core
 
         static Transformer()
         {
-            _documentTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
+            _documentTypes = typeof(Transformer)
+                .Assembly
+                .GetTypes()
                 .Where(p => typeof(IDocument).IsAssignableFrom(p) && !p.IsAbstract)
                 .ToArray();
         }
