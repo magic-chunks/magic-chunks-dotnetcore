@@ -152,8 +152,16 @@ Task("Build")
 
 Task("Pack")
     .Description("Packs library into different packages")
+    .IsDependentOn("PackDotnet")
     .IsDependentOn("PackNuget")
     .IsDependentOn("PackVSTS");
+
+Task("PackDotnet")
+    .Description("Packs library into zip package")
+    .IsDependentOn("Build")
+    .Does(() => {
+        Zip(paths.workingDirDotNet, System.IO.Path.Combine(paths.workingDirDotNet, "MagicChunks-" + version + ".zip"));
+    });
 
 Task("PackNuget")
     .Description("Packs library into Nuget package")
