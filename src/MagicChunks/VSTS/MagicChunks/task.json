@@ -18,7 +18,7 @@
   "demands": [
     "DotNetFramework"
   ],
-  "minimumAgentVersion": "1.96.2",
+  "minimumAgentVersion": "1.95.1",
   "groups": [
     {
       "name": "sourcePath",
