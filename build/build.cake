@@ -102,9 +102,33 @@ Task("UpdateVersion")
         {
             var o = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(System.IO.File.ReadAllText(f.FullPath));
             o["version"] = version;
-            System.IO.File.WriteAllText(f.FullPath, Newtonsoft.Json.JsonConvert.SerializeObject(o));
+            System.IO.File.WriteAllText(f.FullPath, Newtonsoft.Json.JsonConvert.SerializeObject(o, Newtonsoft.Json.Formatting.Indented));
         }
 
+        var versionMatch = System.Text.RegularExpressions.Regex.Match(version, @"^(\d+)\.(\d+)\.(\d+)$");
+        if (versionMatch.Success && (versionMatch.Groups.Count == 4))
+        {
+            var taskFiles = GetFiles(paths.workingDirSolutionDir + "/MagicChunks/**/task.json");
+            foreach (var f in taskFiles)
+            {
+                var o = (Newtonsoft.Json.Linq.JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(System.IO.File.ReadAllText(f.FullPath));
+                if ((o["version"] != null) && (o["version"]["Major"] != null) && (o["version"]["Minor"] != null) && (o["version"]["Patch"] != null))
+                {
+                    o["version"]["Major"] = int.Parse(versionMatch.Groups[1].Value);
+                    o["version"]["Minor"] = int.Parse(versionMatch.Groups[2].Value);
+                    o["version"]["Patch"] = int.Parse(versionMatch.Groups[3].Value);
+                    System.IO.File.WriteAllText(f.FullPath, Newtonsoft.Json.JsonConvert.SerializeObject(o, Newtonsoft.Json.Formatting.Indented));
+                }
+                else
+                {
+                    Warning("Manifest " + f + " does not contains version property");
+                }
+            }
+        }
+        else
+        {
+            Warning("Unable to parse version: " + version);
+        }
     });
 
 Task("Build")
