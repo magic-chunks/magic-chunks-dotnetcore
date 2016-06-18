@@ -16,22 +16,22 @@ namespace MagicChunks.Cake
     {
         [CakeMethodAlias]
         public static bool TransformConfig(this ICakeContext context, string path,
-            TransformationCollection trasformations)
+            TransformationCollection transformations)
         {
-            return TransformConfig(context, null, path, path, trasformations);
+            return TransformConfig(context, null, path, path, transformations);
         }
 
         [CakeMethodAlias]
         public static bool TransformConfig(this ICakeContext context, string path, string target,
-            TransformationCollection trasformations)
+            TransformationCollection transformations)
         {
-            return TransformConfig(context, null, path, target, trasformations);
+            return TransformConfig(context, null, path, target, transformations);
 
         }
 
         [CakeMethodAlias]
         public static bool TransformConfig(this ICakeContext context, string type, string path, string target,
-            TransformationCollection trasformations)
+            TransformationCollection transformations)
         {
             var result = true;
 
@@ -39,7 +39,7 @@ namespace MagicChunks.Cake
 
             try
             {
-                TransformTask.Transform(type, path, target ?? path, trasformations);
+                TransformTask.Transform(type, path, target ?? path, transformations);
 
                 context.Log.Write(Verbosity.Normal, LogLevel.Information, "File transformed to: {0}", target ?? path);
             }

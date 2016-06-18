@@ -21,7 +21,7 @@ param(
 
 [System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\MagicChunks.dll") | Out-Null
 
-Write-Host "Transofrming file $($sourcePath)"
+Write-Host "Transforming file $($sourcePath)"
 
 try {
     $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection `
