@@ -8,7 +8,7 @@ Easy to use tool to config transformations for JSON, XML and YAML.
 
 Everyone remember [XML Document Transform](https://msdn.microsoft.com/en-us/library/dd465326.aspx) syntax to transform configuration files during the build process. But world is changing and now you can have different config types in your .NET projects.
 
-**Magic Chunks** allows you to transform you JSON, XML and YAML files. You can run it at [MSBuild](https://msdn.microsoft.com/en-us/library/dd393574.aspx), [Cake](http://cakebuild.net/), [PSake](https://github.com/psake/psake) or [Powershell](https://msdn.microsoft.com/en-us/powershell/) script as well as use [Visual Studio Team Services build extension](https://marketplace.visualstudio.com/items?itemName=sergeyzwezdin.magic-chunks). Also, it's possible to reference Magic Chunks from your .NET projects in more complicated cases.
+**Magic Chunks** allows you to transform you JSON, XML and YAML files. You can run it at [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki/MSBuild), [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki/Cake), [PSake](https://github.com/sergeyzwezdin/magic-chunks/wiki/PSake) or [Powershell](https://github.com/sergeyzwezdin/magic-chunks/wiki/Powershell) script as well as use [Visual Studio Team Services build extension](https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension). Also, it's possible to reference Magic Chunks from your .NET projects in more complicated cases.
 
 # How it works
 
@@ -83,9 +83,9 @@ After transformation you will have:
 
 Magic Chunks supports following file formats:
 
-1. [JSON](https://wikipedia.org/wiki/JSON)
-2. [XML](https://wikipedia.org/wiki/XML)
-3. [YAML](https://wikipedia.org/wiki/YAML)
+1. [XML](https://github.com/sergeyzwezdin/magic-chunks/wiki/XML)
+2. [JSON](https://github.com/sergeyzwezdin/magic-chunks/wiki/JSON)
+3. [YAML](https://github.com/sergeyzwezdin/magic-chunks/wiki/YAML)
 
 # Getting started
 
@@ -113,17 +113,17 @@ Format-MagicChunks -path C:\sources\project1\appsettings.json -transformations @
 
 To transform config files you can use any approach you like:
 
- - [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki)
- - [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki)
- - [PSake](https://github.com/sergeyzwezdin/magic-chunks/wiki)
- - [Powershell](https://github.com/sergeyzwezdin/magic-chunks/wiki)
- - [VSTS extension](https://github.com/sergeyzwezdin/magic-chunks/wiki)
+ - [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki/MSBuild)
+ - [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki/Cake)
+ - [Powershell](https://github.com/sergeyzwezdin/magic-chunks/wiki/Powershell)
+ - [PSake](https://github.com/sergeyzwezdin/magic-chunks/wiki/PSake)
+ - [VSTS extension](https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension)
 
 To learn more check [wiki page](https://github.com/sergeyzwezdin/magic-chunks/wiki).
 
 # Contributions
 
-Any contributions are welcome. Most probably someone will want to extend it with additional formats. So feel free to make pull requests for your changes.
+Any contributions are welcome. Most probably someone will want to extend it with additional formats. So feel free to make pull requests for your changes. Read [contribution guidelines](https://github.com/sergeyzwezdin/magic-chunks/wiki/Contribution-guidelines) to start.
 
 # License
 
