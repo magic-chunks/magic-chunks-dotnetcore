@@ -1,0 +1,44 @@
+{
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "mongodb://localhost",
+      "DatabaseName": "TestDb"
+    }
+  },
+
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Verbose",
+      "System": "Information",
+      "Microsoft": "Information",
+      "Performance": "Information"
+    }
+  },
+
+  "Smtp": {
+    "Method": "SpecifiedPickupDirectory",
+
+    "From": {
+      "Address": "noreply@gmail.com",
+      "DisplayName": "TicketUp"
+    },
+
+    "SpecifiedPickupDirectory": {
+      "PickupDirectoryLocation": "myapp\\maildrop\\",
+      "AbsolutePath": false
+    },
+
+    "Network": {
+      "Host": "smtp.gmail.com",
+      "Port": 587,
+      "Timeout": 3000,
+      "EnableSsl": true,
+      "Credentials": {
+        "Username": "testuser@gmail.com",
+        "Password": "123456"
+      }
+    }
+
+  }
+}

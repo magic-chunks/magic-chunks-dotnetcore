@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="tools\MagicChunks.targets" />
+
+  <ItemGroup>
+      <TransformsXml Include="configuration/system.web/authentication/@mode">
+         <Value>Forms</Value>
+      </TransformsXml>
+      <TransformsXml Include="configuration/system.web/httpRuntime">
+         <Value>125</Value>
+      </TransformsXml>
+      <TransformsXml Include="configuration/appSettings/add[@key='LoadBundledScripts']/@value">
+         <Value>true</Value>
+      </TransformsXml>
+      <TransformsXml Include="configuration/appSettings/add[@key='SomethingNew']/@value">
+         <Value>NewValue</Value>
+      </TransformsXml>
+      <TransformsXml Include="configuration/newKey">
+         <Value>12345</Value>
+      </TransformsXml>
+
+    <TransformsJson Include="Data/DefaultConnection/ConnectionString">
+        <Value>mongodb://10.1.25.144/</Value>
+    </TransformsJson>
+    <TransformsJson Include="Data/DefaultConnection/Production">
+        <Value>true</Value>
+    </TransformsJson>
+    <TransformsJson Include="Smtp/Method">
+        <Value>Network</Value>
+    </TransformsJson>
+    <TransformsJson Include="NewKey">
+        <Value>12345</Value>
+    </TransformsJson>
+
+    <TransformsYaml Include="baseUrl">
+        <Value>http://production.com/</Value>
+    </TransformsYaml>
+    <TransformsYaml Include="frontend_version">
+        <Value>3.0.5</Value>
+    </TransformsYaml>
+    <TransformsYaml Include="new_key">
+        <Value>23</Value>
+    </TransformsYaml>
+    <TransformsYaml Include="another_key/val/t">
+        <Value>qwerty</Value>
+    </TransformsYaml>
+
+   </ItemGroup>
+
+
+   <Target Name="Default">
+
+      <TransformConfig Path="Web.config" Target="Web.transformed.1.config" Trasformations="@(TransformsXml)" />
+      <TransformConfig Path="Web.config" Target="Web.transformed.2.config" Type="Xml" Trasformations="@(TransformsXml)" />
+
+      <TransformConfig Path="config.json" Target="config.transformed.1.json" Trasformations="@(TransformsJson)" />
+      <TransformConfig Path="config.json" Target="config.transformed.2.json" Type="Json" Trasformations="@(TransformsJson)" />
+
+      <TransformConfig Path="_config.yml" Target="_config.transformed.1.yml" Trasformations="@(TransformsYaml)" />
+      <TransformConfig Path="_config.yml" Target="_config.transformed.2.yml" Type="Yaml" Trasformations="@(TransformsYaml)" />
+
+   </Target>
+</Project>

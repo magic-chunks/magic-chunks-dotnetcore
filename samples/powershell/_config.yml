@@ -1,0 +1,15 @@
+baseUrl: "http://localhost/"
+permalink: ":year/:title"
+frontend_version: 1.0.0
+only_frontmatter_categories: true
+exclude:
+  - node_modules\
+  - styles\
+  - scripts\
+  - .vscode\
+  - package.json
+  - gulpfile.js
+  - jsconfig.json
+similar_posts:
+    filter_threshold: 0.3
+    related_count: 3
