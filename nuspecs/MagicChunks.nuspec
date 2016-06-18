@@ -8,6 +8,7 @@
         <owners>Sergey Zwezdin</owners>
         <licenseUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/sergeyzwezdin/magic-chunks</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/logo/logo64.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Easy to use tool to config transformations for JSON, XML and YAML.</description>
         <summary />
