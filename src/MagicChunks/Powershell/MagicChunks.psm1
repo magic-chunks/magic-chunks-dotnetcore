@@ -18,7 +18,7 @@
         [string]$type
     )
     PROCESS {
-        [System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\MagicChunks.dll") | Out-Null
+        Add-Type -Path "$PSScriptRoot\MagicChunks.dll"
 
         Write-Host "Transforming file $($path)"
 

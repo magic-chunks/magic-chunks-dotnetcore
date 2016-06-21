@@ -19,7 +19,7 @@ param(
     $transformations
 )
 
-[System.Reflection.Assembly]::LoadFrom("$PSScriptRoot\MagicChunks.dll") | Out-Null
+Add-Type -Path "$PSScriptRoot\MagicChunks.dll"
 
 Write-Host "Transforming file $($sourcePath)"
 
@@ -27,7 +27,7 @@ try {
     $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection `
 
     
-    foreach($t in ($transformations | ConvertFrom-Json).psobject.properties) {
+    foreach($t in ($transformations.Replace("\", "\\") | ConvertFrom-Json).psobject.properties) {
         $transforms.Add($t.name, $t.value)
     }
 
