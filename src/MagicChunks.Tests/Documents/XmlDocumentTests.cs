@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using MagicChunks.Documents;
 using Xunit;
 
@@ -129,6 +130,61 @@ namespace MagicChunks.Tests.Documents
     </div>
   </BODY>
 </html>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformWithNamesapce2()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<nlog xmlns=""http://www.nlog-project.org/schemas/NLog.xsd""
+      xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+      autoReload=""true"">
+  <targets>
+    <target name=""file"" xsi:type=""File""
+        layout=""${longdate} ${message} ${exception:format=tostring}""
+        filename=""${basedir}\logs\${date:format=yyyy-MM-dd}.txt""
+        archiveFileName=""${basedir}\logs\${date:format=yyyy-MM-dd}.{#}.txt""
+        archiveEvery=""Day""
+        archiveAboveSize=""512000""
+        archiveNumbering=""Rolling""
+        maxArchiveFiles=""15""
+        keepFileOpen=""false"" />
+  </targets>
+  <rules>
+    <logger name=""*"" minlevel=""Info"" writeTo=""file"" />
+  </rules>
+</nlog>");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "nlog", "targets", "target[@name='file']", "@filename"}, "$(logspath)\\${date:format=yyyy-MM-dd}.txt");
+            document.ReplaceKey(new[] { "nlog", "targets", "target[@name='file']", "@archiveFileName"}, "$(logspath)\\${date:format=yyyy-MM-dd}.{#}.txt");
+            document.ReplaceKey(new[] { "nlog", "rules", "logger[@name='*']", "@minlevel"}, "$(loglevel)");
+
+            var result = document.ToString();
+
+            // Assert
+
+            Assert.Equal(@"<nlog xmlns=""http://www.nlog-project.org/schemas/NLog.xsd""
+      xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+      autoReload=""true"">
+  <targets>
+    <target name=""file"" xsi:type=""File""
+        layout=""${longdate} ${message} ${exception:format=tostring}""
+        filename=""$(logspath)\${date:format=yyyy-MM-dd}.txt""
+        archiveFileName=""$(logspath)\${date:format=yyyy-MM-dd}.{#}.txt""
+        archiveEvery=""Day""
+        archiveAboveSize=""512000""
+        archiveNumbering=""Rolling""
+        maxArchiveFiles=""15""
+        keepFileOpen=""false"" />
+  </targets>
+  <rules>
+    <logger name=""*"" minlevel=""$(loglevel)"" writeTo=""file"" />
+  </rules>
+</nlog>".Replace(Environment.NewLine, String.Empty), result.Replace(Environment.NewLine, String.Empty), ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]

@@ -84,7 +84,7 @@ namespace MagicChunks.Documents
 
             if (targetElement.StartsWith("@") == true)
             {   // Attriubte update
-                current.SetAttributeValue(XName.Get(targetElement.TrimStart('@'), documentNamespace), value);
+                current.SetAttributeValue(XName.Get(targetElement.TrimStart('@')), value);
             }
             else if (!attributeFilterMatch.Success)
             {   // Property update
@@ -104,7 +104,7 @@ namespace MagicChunks.Documents
 
         public override string ToString()
         {
-            return Document?.ToString() ?? String.Empty;
+            return Document?.ToString(SaveOptions.None) ?? String.Empty;
         }
 
         public void Dispose()
