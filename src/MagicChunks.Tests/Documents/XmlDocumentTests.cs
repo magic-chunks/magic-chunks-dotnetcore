@@ -184,7 +184,7 @@ namespace MagicChunks.Tests.Documents
   <rules>
     <logger name=""*"" minlevel=""$(loglevel)"" writeTo=""file"" />
   </rules>
-</nlog>".Replace(Environment.NewLine, String.Empty), result.Replace("\r", String.Empty).Replace("\n", String.Empty), ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+</nlog>".Replace("\r", String.Empty).Replace("\n", String.Empty), result.Replace("\r", String.Empty).Replace("\n", String.Empty), ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
