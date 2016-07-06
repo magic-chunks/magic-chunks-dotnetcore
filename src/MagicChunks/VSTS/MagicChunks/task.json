@@ -118,6 +118,10 @@
       "target": "$(currentDirectory)\\transform.ps1", 
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
+    },
+    "Node": {
+      "target": "$(currentDirectory)\\transform.js",
+      "argumentFormat": ""
     }
   }
 }
