@@ -14,7 +14,9 @@ Everyone remember [XML Document Transform](https://msdn.microsoft.com/en-us/libr
 
 The main idea is quite simple. Magic Chunks represents transformation as a key-value collection.
 
-The key contains path at source file which should be modified. And the value contains data for this path in modified file.
+The key contains path in the source file which should be modified, and the value contains data for this path in modified file.
+
+If you are using Magic Chunks from .NET or Cake, you can also pass in any keys to be removed into the constructor.
 
 #### XML
 
