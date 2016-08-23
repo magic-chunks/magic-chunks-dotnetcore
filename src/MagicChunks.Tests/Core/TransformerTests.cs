@@ -122,6 +122,7 @@ namespace MagicChunks.Tests.Core
             {
                 { "xml/a/y", "2" },
                 { "xml/a/@y", "3" },
+                { "xml/a/x/@q", "9" },
                 { "xml/a/z/t/w", "3" },
                 { "xml/b", "5" },
                 { "xml/c/a", "1" },
@@ -170,7 +171,7 @@ namespace MagicChunks.Tests.Core
 
             Assert.Equal(@"<xml>
   <a y=""3"">
-    <x>1</x>
+    <x q=""9"">1</x>
     <y>2</y>
     <z>
       <t>

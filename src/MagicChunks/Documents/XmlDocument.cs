@@ -90,12 +90,13 @@ namespace MagicChunks.Documents
                 else if (currentElement != null)
                 {
                     current = currentElement;
-
-                    if (current.HasElements == false)
-                        current.Value = String.Empty;
                 }
                 else
+                {
+                    if (!current.HasElements)
+                        current.SetValue("");
                     current = current.CreateChildElement(documentNamespace, pathElement);
+                }
             }
             return current;
         }
@@ -113,9 +114,15 @@ namespace MagicChunks.Documents
                 var elementToUpdate = current.GetChildElementByName(targetElement);
 
                 if (elementToUpdate != null)
+                {
                     elementToUpdate.Value = value;
+                }
                 else
+                {
+                    if(!current.HasElements)
+                        current.SetValue("");
                     current.Add(new XElement(XName.Get(targetElement, documentNamespace)) {Value = value});
+                }
             }
             else
             {   // Filtered element update
