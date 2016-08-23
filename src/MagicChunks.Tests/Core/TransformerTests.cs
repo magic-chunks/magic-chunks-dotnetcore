@@ -12,7 +12,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("e")
             {
                 { "a/y", "2" },
                 { "a/z/t/w", "3" },
@@ -32,7 +32,8 @@ namespace MagicChunks.Tests.Core
         'x': '1'
     },
     'b': '2',
-    'c': '3'
+    'c': '3',
+    'e': '4'
 }"), transform);
 
 
@@ -64,7 +65,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("e")
             {
                 { "a/y", "2" },
                 { "a/z/t/w", "3" },
@@ -84,7 +85,8 @@ namespace MagicChunks.Tests.Core
         'x': '1'
     },
     'b': '2',
-    'c': '3'
+    'c': '3',
+    'e': '4'
 }", transform);
 
 
@@ -116,7 +118,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("xml/g")
             {
                 { "xml/a/y", "2" },
                 { "xml/a/@y", "3" },
@@ -158,6 +160,9 @@ namespace MagicChunks.Tests.Core
     <val>3</val>
   </item>
 </f>
+<g>
+    <x></x>
+</g>
 </xml>"), transform);
 
 
@@ -205,7 +210,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("xml/g")
             {
                 { "xml/a/y", "2" },
                 { "xml/a/@y", "3" },
@@ -247,6 +252,9 @@ namespace MagicChunks.Tests.Core
     <val>3</val>
   </item>
 </f>
+<g>
+    <x></x>
+</g>
 </xml>", transform);
 
 
@@ -294,7 +302,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("e")
             {
                 { "a/y", "2" },
                 { "a/z/t/w", "3" },
@@ -312,7 +320,9 @@ namespace MagicChunks.Tests.Core
             string result = transformer.Transform(new YamlDocument(@"a:
     x: 1
 b: 2
-c: 3"), transform);
+c: 3
+e:
+    x: 5"), transform);
 
 
             // Assert
@@ -337,7 +347,7 @@ d: 4
         {
             // Arrange
 
-            var transform = new TransformationCollection()
+            var transform = new TransformationCollection("e")
             {
                 { "a/y", "2" },
                 { "a/z/t/w", "3" },
@@ -355,7 +365,9 @@ d: 4
             string result = transformer.Transform(@"a:
     x: 1
 b: 2
-c: 3", transform);
+c: 3
+e:
+    x: 5", transform);
 
 
             // Assert
@@ -392,7 +404,7 @@ d: 4
 
 
             // Assert
-            Assert.True(result.Message?.StartsWith("Wrong transformation key."));
+            Assert.True(result.Message?.StartsWith("Blank transformation key."));
         }
 
         [Fact]

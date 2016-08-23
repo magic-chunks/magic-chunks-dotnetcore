@@ -68,15 +68,27 @@ namespace MagicChunks.Core
         }
         public string Transform(IDocument source, TransformationCollection transformations)
         {
+            foreach (var key in transformations.RemoveKeys)
+            {
+                if (String.IsNullOrWhiteSpace(key))
+                    throw new ArgumentException("Blank transformation key.", nameof(transformations));
+                source.RemoveKey(SplitKey(key));
+            }
+
             foreach (var transformation in transformations)
             {
-                if (String.IsNullOrWhiteSpace(transformation.Key) == false)
-                    source.ReplaceKey(transformation.Key.Trim().Split('/').Select(x => x.Trim()).ToArray(), transformation.Value);
-                else
-                    throw new ArgumentException("Wrong transformation key.", nameof(transformations));
+                if (String.IsNullOrWhiteSpace(transformation.Key))
+                    throw new ArgumentException("Blank transformation key.", nameof(transformations));
+
+                source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
             }
 
             return source.ToString();
+        }
+
+        private static string[] SplitKey(string key)
+        {
+            return key.Trim().Split('/').Select(x => x.Trim()).ToArray();
         }
 
         public void Dispose()

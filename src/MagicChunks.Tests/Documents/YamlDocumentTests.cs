@@ -48,6 +48,35 @@ d: 4
         }
 
         [Fact]
+        public void Remove()
+        {
+            // Arrange
+
+            var document = new YamlDocument(
+@"a:
+    x: 1
+b:
+    x: 1
+c: 3");
+
+
+            // Act
+
+            document.RemoveKey(new[] { "A"});
+            document.RemoveKey(new[] { "b", "X"});
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(
+@"b: {}
+c: 3
+", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void ValidateEmptyPath()
         {
             // Assert

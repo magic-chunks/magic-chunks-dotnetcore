@@ -188,6 +188,39 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void Remove()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<xml>
+    <a>
+      <x>1</x>
+    </a>
+    <b>
+      <x>1</x>
+    </b>
+    <c key=""item1"" foo=""bar"">3</c>
+</xml>");
+
+
+            // Act
+
+            document.RemoveKey(new[] { "xml", "a"});
+            document.RemoveKey(new[] { "xml", "b", "x"});
+            document.RemoveKey(new[] { "xml", "c", "@key"});
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<xml>
+    <b />
+    <c foo=""bar"">3</c>
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void ValidateEmptyPath()
         {
             // Assert
