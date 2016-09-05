@@ -42,6 +42,23 @@ namespace MagicChunks.Documents
             UpdateTargetElement(current, path.Last(), value);
         }
 
+        public void RemoveKey(string[] path)
+        {
+            if ((path == null) || (path.Any() == false))
+                throw new ArgumentException("Path is not speicified.", nameof(path));
+
+            if (path.Any(String.IsNullOrWhiteSpace))
+                throw new ArgumentException("There is empty items in the path.", nameof(path));
+
+            JObject current = (JObject)Document.Root;
+
+            if (current == null)
+                throw new ArgumentException("Root element is not present.", nameof(path));
+
+            current = FindPath(path.Take(path.Length - 1), current);
+            current.Remove(path.Last());
+        }
+
         private static JObject FindPath(IEnumerable<string> path, JObject current)
         {
             foreach (string pathElement in path)

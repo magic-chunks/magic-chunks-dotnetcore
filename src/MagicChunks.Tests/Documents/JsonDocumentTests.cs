@@ -57,6 +57,38 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void Remove()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'a': { 
+        'x': '1'
+    },
+    'b': { 
+        'x': '1'
+    },
+    'c': '3'
+}");
+
+
+            // Act
+
+            document.RemoveKey(new[] { "a"});
+            document.RemoveKey(new[] { "b", "x" });
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""b"": {},
+  ""c"": ""3""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void ValidateEmptyPath()
         {
             // Assert

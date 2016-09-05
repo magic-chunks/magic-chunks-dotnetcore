@@ -50,6 +50,28 @@ namespace MagicChunks.Documents
             UpdateTargetElement(value, path.Last(), current, documentNamespace);
         }
 
+        public void RemoveKey(string[] path)
+        {
+            if ((path == null) || (path.Any() == false))
+                throw new ArgumentException("Path is not specified.", nameof(path));
+
+            if (path.Any(String.IsNullOrWhiteSpace))
+                throw new ArgumentException("There is empty items in the path.", nameof(path));
+
+            XElement current = Document.Root;
+            string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
+
+            if (current == null)
+                throw new ArgumentException("Root element is not present.", nameof(path));
+
+            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.InvariantCultureIgnoreCase) != 0)
+                throw new ArgumentException("Root element name does not match path.", nameof(path));
+
+            current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+
+            RemoveTargetElement(path.Last(), current, documentNamespace);
+        }
+
         private static XElement FindPath(IEnumerable<string> path, XElement current, string documentNamespace)
         {
             foreach (string pathElement in path)
@@ -68,12 +90,13 @@ namespace MagicChunks.Documents
                 else if (currentElement != null)
                 {
                     current = currentElement;
-
-                    if (current.HasElements == false)
-                        current.Value = String.Empty;
                 }
                 else
+                {
+                    if (!current.HasElements)
+                        current.SetValue("");
                     current = current.CreateChildElement(documentNamespace, pathElement);
+                }
             }
             return current;
         }
@@ -91,14 +114,41 @@ namespace MagicChunks.Documents
                 var elementToUpdate = current.GetChildElementByName(targetElement);
 
                 if (elementToUpdate != null)
+                {
                     elementToUpdate.Value = value;
+                }
                 else
+                {
+                    if(!current.HasElements)
+                        current.SetValue("");
                     current.Add(new XElement(XName.Get(targetElement, documentNamespace)) {Value = value});
+                }
             }
             else
             {   // Filtered element update
                 current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
                 current.Value = value;
+            }
+        }
+
+        private static void RemoveTargetElement(string targetElement, XElement current, string documentNamespace)
+        {
+            var attributeFilterMatch = AttributeFilterRegex.Match(targetElement);
+
+            if (targetElement.StartsWith("@") == true)
+            {   // Attriubte update
+                current.Attribute(XName.Get(targetElement.TrimStart('@')))
+                    ?.Remove();
+            }
+            else if (!attributeFilterMatch.Success)
+            {   // Property update
+                var elementToRemove = current.GetChildElementByName(targetElement);
+                elementToRemove.Remove();
+            }
+            else
+            {   // Filtered element update
+                current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace)
+                    .Remove();
             }
         }
 
