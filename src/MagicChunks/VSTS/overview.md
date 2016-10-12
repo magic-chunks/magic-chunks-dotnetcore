@@ -50,6 +50,8 @@ As a **result** you will have:
 ![Add build step](images/get-started-3.png)
 ### Step 4: Specify configuration file path and required transformations.
 ![Add build step](images/get-started-4.png)
+### Alternately, specify a path to a file containing the transformations.
+![Add build step](images/get-started-5.png)
 ### Step 5: Run build. Profit!
 
 # Setup in 30 seconds
