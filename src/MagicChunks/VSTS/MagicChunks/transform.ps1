@@ -47,7 +47,8 @@ try {
             $transformations = Get-Content $transformationsFile
         }
         else {
-            ThrowError -ExceptionName "ArgumentException" -ExceptionMessage "Could not find transformation file at $transformationsFile"
+            Write-Error -Message "Could not find transformation file at $transformationsFile"
+            Exit
         }
     }
     
