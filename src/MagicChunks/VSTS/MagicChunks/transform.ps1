@@ -15,9 +15,24 @@ param(
     [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
     $transformationType,
 
-    [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
-    $transformations
+    [String] [Parameter(Mandatory = $false)] 
+    $transformations,
+    
+    [String] [Parameter(Mandatory = $false)]
+    $transformationsFile    
 )
+
+if ($transformationType -eq "json" -And [String]::IsNullOrEmpty($transformations))
+{
+    Write-Error -Message "Inline transformations must be specified if Inline JSON transformation type is enabled!"
+    Exit
+}
+
+if ($transformationType -eq "file" -And [String]::IsNullOrEmpty($transformationsFile))
+{
+    Write-Error -Message "Transformation file path must be specified if JSON File transformation type is enabled!"
+    Exit
+}
 
 Add-Type -Path "$PSScriptRoot\MagicChunks.dll"
 
@@ -26,6 +41,10 @@ Write-Host "Transforming file $($sourcePath)"
 try {
     $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection `
 
+    if ($transformationType -eq "file")
+    {
+        $transformations = Get-Content $transformationsFile
+    }
     
     foreach($t in ($transformations.Replace("\", "\\") | ConvertFrom-Json).psobject.properties) {
         $transforms.Add($t.name, $t.value)
