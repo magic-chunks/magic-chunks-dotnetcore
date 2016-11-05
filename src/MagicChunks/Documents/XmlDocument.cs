@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -12,7 +11,7 @@ namespace MagicChunks.Documents
 {
     public class XmlDocument : IDocument
     {
-        private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>\w+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>[\w\:]+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         protected readonly XDocument Document;
 
@@ -107,7 +106,7 @@ namespace MagicChunks.Documents
 
             if (targetElement.StartsWith("@") == true)
             {   // Attriubte update
-                current.SetAttributeValue(XName.Get(targetElement.TrimStart('@')), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">"));
+                current.SetAttributeValue(targetElement.TrimStart('@').GetNameWithNamespace(current, String.Empty), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">"));
             }
             else if (!attributeFilterMatch.Success)
             {   // Property update
@@ -121,7 +120,8 @@ namespace MagicChunks.Documents
                 {
                     if(!current.HasElements)
                         current.SetValue("");
-                    current.Add(new XElement(XName.Get(targetElement, documentNamespace)) {Value = value});
+
+                    current.Add(new XElement(targetElement.GetNameWithNamespace(current, documentNamespace)) {Value = value});
                 }
             }
             else

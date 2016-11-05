@@ -7,29 +7,51 @@ namespace MagicChunks.Helpers
 {
     public static class XmlExtensions
     {
+        public static XName GetNameWithNamespace(this string name, XElement element, string defaultNamespace)
+        {
+            XName result;
+            if (name.Contains(':') == false)
+                result = XName.Get(name, defaultNamespace);
+            else
+            {
+                var attributeNameParts = name.Split(':');
+                var attributeNamespace = element.GetNamespaceOfPrefix(attributeNameParts[0]);
+                if (attributeNamespace != null)
+                    result = XName.Get(attributeNameParts[1], attributeNamespace.NamespaceName);
+                else
+                    result = XName.Get(attributeNameParts[1], defaultNamespace);
+            }
+
+            return result;
+        }
+
         public static XElement GetChildElementByName(this XElement source, string name)
         {
             return source?.Elements()
-                .FirstOrDefault(e => String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
+                .FirstOrDefault(e => name.IndexOf(':') == -1 ? 
+                                        String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0 :
+                                        e.Name == name.GetNameWithNamespace(source, String.Empty));
         }
 
         public static XElement GetChildElementByAttrValue(this XElement source, string name, string attr, string attrValue)
         {
-            return source.Elements()
-                .Where(e => String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0)
-                .FirstOrDefault(e => e.Attributes()
-                    .Any(a => (String.Compare(a.Name.LocalName, attr, StringComparison.InvariantCultureIgnoreCase) == 0) && (a.Value == attrValue))
-                );
+            var elements = source.Elements()
+                .Where(e => String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
+
+            return elements
+                .FirstOrDefault(e => e.Attributes().Any(a => (a.Name == attr.GetNameWithNamespace(source, String.Empty)) && (a.Value == attrValue)));
 
         }
 
         public static XElement CreateChildElement(this XElement source, string documentNamespace, string elementName,
             string attrName = null, string attrValue = null)
         {
-            var item = new XElement(XName.Get(elementName, documentNamespace));
+            var item = new XElement(elementName.GetNameWithNamespace(source, documentNamespace));
 
             if (!String.IsNullOrWhiteSpace(attrName) && !String.IsNullOrWhiteSpace(attrValue))
-                item.SetAttributeValue(XName.Get(attrName, documentNamespace), attrValue);
+            {
+                item.SetAttributeValue(attrName.GetNameWithNamespace(source, documentNamespace), attrValue);
+            }
 
             source.Add(item);
             return item;

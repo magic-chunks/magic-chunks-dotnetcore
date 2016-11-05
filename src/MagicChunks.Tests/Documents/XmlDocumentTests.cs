@@ -215,7 +215,7 @@ namespace MagicChunks.Tests.Documents
             Assert.Equal(@"<nlog xmlns=""http://www.nlog-project.org/schemas/NLog.xsd"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <targets>
     <target name=""file"" xsi:type=""File"" xsi:type2=""val1"">val2</target>
-    <xsi:element prop=""prop"">val3</xsi:element>
+    <xsi:element prop=""val4"">val3</xsi:element>
   </targets>
 </nlog>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
