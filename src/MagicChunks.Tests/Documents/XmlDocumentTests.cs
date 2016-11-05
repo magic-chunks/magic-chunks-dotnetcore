@@ -223,27 +223,50 @@ namespace MagicChunks.Tests.Documents
         [Fact]
         public void ValidateEmptyPath()
         {
-            // Assert
+            // Arrange
             XmlDocument document = new XmlDocument("<xml/>");
 
             // Act
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "", "b" }, ""));
 
-            // Arrange
+            // Assert
             Assert.True(result.Message?.StartsWith("There is empty items in the path."));
         }
 
         [Fact]
-        public void ValidateWithespacePath()
+        public void ValidateWhiteSpacePath()
         {
-            // Assert
+            // Arrange
             XmlDocument document = new XmlDocument("<xml/>");
 
             // Act
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "   ", "b" }, ""));
 
-            // Arrange
+            // Assert
             Assert.True(result.Message?.StartsWith("There is empty items in the path."));
+        }
+
+        [Fact]
+        public void ValidateAmpersandsEscaping()
+        {
+            // Arrange
+            XmlDocument document = new XmlDocument(@"<configuration>
+  <connectionStrings>
+    <add name=""Connection"" connectionString="""" />
+  </connectionStrings>
+</configuration>");
+
+            // Act
+            document.ReplaceKey(new [] { "configuration", "connectionStrings", "add[@name=\"Connection\"]", "@connectionString" }, @"metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=other-server\instance;initial catalog=database;integrated security=True;multipleactiveresultsets=True;&quot;");
+
+            var result = document.ToString();
+
+            // Assert
+            Assert.Equal(@"<configuration>
+  <connectionStrings>
+    <add name=""Connection"" connectionString=""metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=other-server\instance;initial catalog=database;integrated security=True;multipleactiveresultsets=True;&quot;"" />
+  </connectionStrings>
+</configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
     }
 }
