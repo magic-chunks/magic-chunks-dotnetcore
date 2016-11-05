@@ -4,7 +4,7 @@
       <Output TaskParameter="Include" ItemName="ILMergeAssemblies"/> 
     </CreateItem> 
 
-    <Exec Command="&quot;$(MSBuildThisFileDirectory)\ILMerge.exe&quot; /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(ILMergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
+    <Exec Command="&quot;$(MSBuildThisFileDirectory)\ILMerge.exe&quot; /internalize /out:@(MainAssembly) &quot;@(IntermediateAssembly)&quot; @(ILMergeAssemblies->'&quot;%(FullPath)&quot;', ' ')" />
   </Target> 
   <Target Name="_CopyFilesMarkedCopyLocal"/> 
 </Project>
