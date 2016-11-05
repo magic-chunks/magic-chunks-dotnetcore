@@ -188,6 +188,39 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformWithNamesapce3()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<nlog xmlns=""http://www.nlog-project.org/schemas/NLog.xsd""
+      xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <targets>
+    <target name=""file"" xsi:type=""File"" xsi:type2=""12345"" />
+    <xsi:element></xsi:element>
+  </targets>
+</nlog>");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "nlog", "targets", "target[@name='file']", "@xsi:type2" }, "val1");
+            document.ReplaceKey(new[] { "nlog", "targets", "target[@xsi:type='File']" }, "val2");
+            document.ReplaceKey(new[] { "nlog", "targets", "xsi:element" }, "val3");
+            document.ReplaceKey(new[] { "nlog", "targets", "xsi:element", "@prop" }, "val4");
+
+            var result = document.ToString();
+
+            // Assert
+
+            Assert.Equal(@"<nlog xmlns=""http://www.nlog-project.org/schemas/NLog.xsd"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <targets>
+    <target name=""file"" xsi:type=""File"" xsi:type2=""val1"">val2</target>
+    <xsi:element prop=""prop"">val3</xsi:element>
+  </targets>
+</nlog>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void Remove()
         {
             // Arrange
