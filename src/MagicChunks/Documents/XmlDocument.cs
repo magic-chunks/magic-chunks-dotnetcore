@@ -107,7 +107,7 @@ namespace MagicChunks.Documents
 
             if (targetElement.StartsWith("@") == true)
             {   // Attriubte update
-                current.SetAttributeValue(XName.Get(targetElement.TrimStart('@')), value);
+                current.SetAttributeValue(XName.Get(targetElement.TrimStart('@')), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">"));
             }
             else if (!attributeFilterMatch.Success)
             {   // Property update
