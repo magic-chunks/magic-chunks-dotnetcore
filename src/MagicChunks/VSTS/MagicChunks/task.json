@@ -101,7 +101,8 @@
       "required": true,
       "helpMarkDown": "The you will use to define transformations.",
       "options": {
-        "json": "Inline JSON"
+        "json": "Inline JSON",
+        "file": "JSON File"
       },
       "groupName": "transformation"
     },
@@ -119,12 +120,22 @@
       },
       "groupName": "transformation",
       "visibleRule": "transformationType = json"
+    },
+    {
+      "name": "transformationsFile",
+      "type": "filePath",
+      "label": "Transform File",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "JSON file containing the configuration transformations to apply.",
+      "groupName": "transformation",
+      "visibleRule": "transformationType = file"
     }
   ],
   "instanceNameFormat": "Config transform - $(sourcePath)",
   "execution": {
     "PowerShell": {
-      "target": "$(currentDirectory)\\transform.ps1", 
+      "target": "$(currentDirectory)\\transform.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
     }
