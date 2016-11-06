@@ -57,6 +57,105 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void Transform2()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{
+  ""Data"": {
+    ""DefaultConnection"": {
+      ""ConnectionString"": ""mongodb://"",
+      ""DatabaseName"": ""test1""
+    }
+  },
+
+  ""Logging"": {
+    ""IncludeScopes"": false,
+    ""LogLevel"": {
+      ""Default"": ""Verbose"",
+      ""System"": ""Information"",
+      ""Microsoft"": ""Information""
+    }
+  },
+
+  ""Smtp"": {
+    ""Method"": ""SpecifiedPickupDirectory"",
+
+    ""From"": {
+      ""Address"": ""test1@gmail.com"",
+      ""DisplayName"": ""test""
+    },
+
+    ""SpecifiedPickupDirectory"": {
+      ""PickupDirectoryLocation"": ""test\\maildrop\\"",
+      ""AbsolutePath"": false
+    },
+
+    ""Network"": {
+      ""Host"": ""smtp.gmail.com"",
+      ""Port"": 587,
+      ""Timeout"": 3000,
+      ""EnableSsl"": true,
+      ""Credentials"": {
+        ""Username"": ""test@gmail.com"",
+        ""Password"": ""asdasdasd""
+      }
+    }
+
+  }
+}");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "Data", "DefaultConnection", "ConnectionString" }, "mongodb://server1.local.db1.test");
+            document.ReplaceKey(new[] { "Smtp", "Network", "Host" }, "test.ru");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""Data"": {
+    ""DefaultConnection"": {
+      ""ConnectionString"": ""mongodb://server1.local.db1.test"",
+      ""DatabaseName"": ""test1""
+    }
+  },
+  ""Logging"": {
+    ""IncludeScopes"": false,
+    ""LogLevel"": {
+      ""Default"": ""Verbose"",
+      ""System"": ""Information"",
+      ""Microsoft"": ""Information""
+    }
+  },
+  ""Smtp"": {
+    ""Method"": ""SpecifiedPickupDirectory"",
+    ""From"": {
+      ""Address"": ""test1@gmail.com"",
+      ""DisplayName"": ""test""
+    },
+    ""SpecifiedPickupDirectory"": {
+      ""PickupDirectoryLocation"": ""test\\maildrop\\"",
+      ""AbsolutePath"": false
+    },
+    ""Network"": {
+      ""Host"": ""test.ru"",
+      ""Port"": 587,
+      ""Timeout"": 3000,
+      ""EnableSsl"": true,
+      ""Credentials"": {
+        ""Username"": ""test@gmail.com"",
+        ""Password"": ""asdasdasd""
+      }
+    }
+  }
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void Remove()
         {
             // Arrange

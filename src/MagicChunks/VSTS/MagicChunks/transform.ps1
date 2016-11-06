@@ -3,7 +3,7 @@ param(
     [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
     $sourcePath,
 
-    [bool]
+    [String] [Parameter(Mandatory = $true)]
     $sourcePathRecurse,
 
     [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
@@ -43,7 +43,7 @@ if ($transformationType -eq "file" -And [String]::IsNullOrEmpty($transformations
 # Parse transformations
 
 try {
-    $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection `
+    $transforms = New-Object -TypeName MagicChunks.Core.TransformationCollection
 
     if ($transformationType -eq "file") {
         if (Test-Path $transformationsFile) {
@@ -56,6 +56,7 @@ try {
     }
 
     foreach($t in ($transformations.Replace("\", "\\") | ConvertFrom-Json).psobject.properties) {
+        Write-Host "Transformation found: $($t.name): $($t.value)"
         $transforms.Add($t.name, $t.value)
     }
 }
@@ -67,7 +68,7 @@ catch {
 
 # Find files to transform
 
-if ($sourcePathRecurse) {
+if ([System.Convert]::ToBoolean($sourcePathRecurse)) {
     $files = Get-ChildItem $sourcePath -Recurse
 }
 else {
@@ -90,7 +91,7 @@ foreach ($file in $files) {
 
         [MagicChunks.TransformTask]::Transform(($fileType, $null)[[string]::IsNullOrWhitespace($fileType) -or ($fileType -eq "Auto")], $file, $target, $transforms)
 
-        Write-Host "File transformed to $($target)"
+        Write-Host "File $($file) transformed into $($target)"
     }
     catch {
         Write-Error -Message "File $($file) transformation error: $($_.Exception.Message)" -Exception $_.Exception
