@@ -3,6 +3,9 @@ param(
     [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
     $sourcePath,
 
+    [bool]
+    $sourcePathRecurse,
+
     [String] [Parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]
     $fileType,
 
