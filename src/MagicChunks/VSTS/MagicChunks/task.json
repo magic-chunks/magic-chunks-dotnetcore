@@ -47,6 +47,15 @@
       "groupName": "sourcePath"
     },
     {
+      "name": "sourcePathRecurse",
+      "type": "boolean",
+      "label": "Recursive search",
+      "defaultValue": "false",
+      "required": false,
+      "groupName": "sourcePath",
+      "helpMarkDown": "Trying to serarch specified file in folder and sub-folders"
+    },
+    {
       "name": "fileType",
       "type": "pickList",
       "label": "File type",
