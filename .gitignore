@@ -36,6 +36,9 @@ x64/
 *.vssscc
 .builds
 
+# Node/npm
+node_modules
+
 # Visual C++ cache files
 ipch/
 *.aps
