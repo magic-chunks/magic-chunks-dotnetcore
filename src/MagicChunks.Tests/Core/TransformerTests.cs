@@ -133,6 +133,7 @@ namespace MagicChunks.Tests.Core
                 { "xml/f/item[@key = 'item2']/val", "7" },
                 { "xml/f/item[@key=\"item3\"]/val", "8" },
                 { "xml/d", "4" },
+                { "xml/e/item[@key='item4:mamma']/@value", "823" },
             };
 
 
@@ -149,6 +150,7 @@ namespace MagicChunks.Tests.Core
   <item key=""item1"">1</item>
   <item key=""item2"">2</item>
   <item key=""item3"">3</item>
+  <item key=""item4:mamma"" value=""823"" />
 </e>
 <f>
   <item key=""item1"">
@@ -190,6 +192,7 @@ namespace MagicChunks.Tests.Core
     <item key=""item1"">1</item>
     <item key=""item2"">5</item>
     <item key=""item3"">6</item>
+    <item key=""item4:mamma"" value=""823"" />
   </e>
   <f>
     <item key=""item1"">
