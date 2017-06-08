@@ -325,5 +325,28 @@ namespace MagicChunks.Tests.Documents
   </connectionStrings>
 </configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
+
+        [Fact]
+        public void ValidateDoubleColumn()
+        {
+            // Arrange
+            XmlDocument document = new XmlDocument(@"<configuration>
+  <connectionStrings>
+    <add name=""api:Connection"" connectionString="""" />
+  </connectionStrings>
+</configuration>");
+
+            // Act
+            document.ReplaceKey(new[] { "configuration", "connectionStrings", "add[@name='api:Connection']", "@connectionString" }, @"metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=""data source=other-server\instance;initial catalog=database;integrated security=True;multipleactiveresultsets=True;""");
+
+            var result = document.ToString();
+
+            // Assert1
+            Assert.Equal(@"<configuration>
+  <connectionStrings>
+    <add name=""api:Connection"" connectionString=""metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=other-server\instance;initial catalog=database;integrated security=True;multipleactiveresultsets=True;&quot;"" />
+  </connectionStrings>
+</configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
     }
 }

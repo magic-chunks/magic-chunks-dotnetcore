@@ -9,12 +9,14 @@ namespace MagicChunks.Helpers
     {
         public static XName GetNameWithNamespace(this string name, XElement element, string defaultNamespace)
         {
+            var preparedName = name.Split('[')[0];
+
             XName result;
-            if (name.Contains(':') == false)
-                result = XName.Get(name, defaultNamespace);
+            if (preparedName.Contains(':') == false)
+                result = XName.Get(preparedName, defaultNamespace);
             else
             {
-                var attributeNameParts = name.Split(':');
+                var attributeNameParts = preparedName.Split(':');
                 var attributeNamespace = element.GetNamespaceOfPrefix(attributeNameParts[0]);
                 if (attributeNamespace != null)
                     result = XName.Get(attributeNameParts[1], attributeNamespace.NamespaceName);

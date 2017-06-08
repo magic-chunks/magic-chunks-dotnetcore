@@ -427,5 +427,49 @@ d: 4
             // Assert
             Assert.True(result.Message?.StartsWith("Unknown document type."));
         }
+
+        [Fact]
+        public void TransformXmlSpecial()
+        {
+            // Arrange
+
+            var transform = new TransformationCollection()
+            {
+                { "xml/a/item[@key = 'item2']", "5" },
+                { "xml/b/item[@key = 'item2']/@value", "7" },
+                { "xml/b/item[@key = 'test:item3']/@value", "8" },
+                { "xml/b/item[@key='test2:item3']/@value", "8" },
+            };
+
+
+            // Act
+
+            var transformer = new Transformer();
+            string result = transformer.Transform(new XmlDocument(@"<xml>
+<a>
+  <item key=""item1"">1</item>
+  <item key=""item2"">2</item>
+</a>
+<b>
+   <item key=""item1"" value=""1"">1</item>
+</b>
+</xml>"), transform);
+
+
+            // Assert
+
+            Assert.Equal(@"<xml>
+  <a>
+    <item key=""item1"">1</item>
+    <item key=""item2"">5</item>
+  </a>
+  <b>
+   <item key=""item1"" value=""1"">1</item>
+   <item key=""item2"" value=""7"" />
+   <item key=""test:item3"" value=""8"" />
+   <item key=""test2:item3"" value=""8"" />
+  </b>
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
     }
 }
