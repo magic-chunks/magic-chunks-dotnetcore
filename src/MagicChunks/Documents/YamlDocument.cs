@@ -15,7 +15,11 @@ namespace MagicChunks.Documents
 
         public YamlDocument(string source)
         {
-            var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention(), objectFactory: new CustomObjectFactory());
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(new CamelCaseNamingConvention())
+                .WithObjectFactory(new CustomObjectFactory())
+                .Build();
+
             using (var reader = new StringReader(source))
             {
                 try
