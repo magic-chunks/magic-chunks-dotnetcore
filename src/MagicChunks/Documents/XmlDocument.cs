@@ -80,21 +80,24 @@ namespace MagicChunks.Documents
 
                 var attributeFilterMatch = AttributeFilterRegex.Match(pathElement);
 
-                var currentElement = current?.GetChildElementByName(pathElement);
-
                 if (attributeFilterMatch.Success)
                 {
                     current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
                 }
-                else if (currentElement != null)
-                {
-                    current = currentElement;
-                }
                 else
                 {
-                    if (!current.HasElements)
-                        current.SetValue("");
-                    current = current.CreateChildElement(documentNamespace, pathElement);
+                    var currentElement = current?.GetChildElementByName(pathElement);
+
+                    if (currentElement != null)
+                    {
+                        current = currentElement;
+                    }
+                    else
+                    {
+                        if (!current.HasElements)
+                            current.SetValue("");
+                        current = current.CreateChildElement(documentNamespace, pathElement);
+                    }
                 }
             }
             return current;
