@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MagicChunks.Core;
 using MagicChunks.Documents;
 using Xunit;
@@ -296,6 +296,42 @@ namespace MagicChunks.Tests.Core
   </f>
   <d>4</d>
 </xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformXmlWithNamespace()
+        {
+            // Arrange
+
+            var transform = new TransformationCollection()
+            {
+                { "manifest/@android:versionCode", "10001" }
+            };
+
+
+            // Act
+
+            var transformer = new Transformer();
+            string result = transformer.Transform(new XmlDocument(@"<manifest xmlns:android=""http://schemas.android.com/apk/res/android""
+  package=""com.myapp.name.here""
+  android:installLocation=""auto""
+  android:versionCode=""10000""
+  android:versionName=""1"">
+	<uses-sdk android:minSdkVersion=""18"" android:targetSdkVersion=""23"" />
+	<uses-permission android:name=""android.permission.CHANGE_WIFI_STATE"" />
+	<uses-permission android:name=""android.permission.ACCESS_WIFI_STATE"" />
+	<application android:label=""Scan Plan 2 Test"" android:icon="""" android:theme="""" />
+</manifest>"), transform);
+
+
+            // Assert
+
+            Assert.Equal(@"<manifest xmlns:android=""http://schemas.android.com/apk/res/android"" package=""com.myapp.name.here"" android:installLocation=""auto"" android:versionCode=""10001"" android:versionName=""1"">
+  <uses-sdk android:minSdkVersion=""18"" android:targetSdkVersion=""23"" />
+  <uses-permission android:name=""android.permission.CHANGE_WIFI_STATE"" />
+  <uses-permission android:name=""android.permission.ACCESS_WIFI_STATE"" />
+  <application android:label=""Scan Plan 2 Test"" android:icon="""" android:theme="""" />
+</manifest>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]

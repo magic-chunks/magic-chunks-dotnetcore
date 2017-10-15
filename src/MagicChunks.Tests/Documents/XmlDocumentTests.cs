@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 using MagicChunks.Documents;
 using Xunit;
@@ -221,6 +221,38 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformWithNamesapce4()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<manifest xmlns:android=""http://schemas.android.com/apk/res/android""
+  package=""com.myapp.name.here""
+  android:installLocation=""auto""
+  android:versionCode=""10000""
+  android:versionName=""1"">
+	<uses-sdk android:minSdkVersion=""18"" android:targetSdkVersion=""23"" />
+	<uses-permission android:name=""android.permission.CHANGE_WIFI_STATE"" />
+	<uses-permission android:name=""android.permission.ACCESS_WIFI_STATE"" />
+	<application android:label=""Scan Plan 2 Test"" android:icon="""" android:theme="""" />
+</manifest>");
+
+            // Act
+
+            document.ReplaceKey(new[] { "manifest", "@android:versionCode" }, "10001");
+
+            var result = document.ToString();
+
+            // Assert
+
+            Assert.Equal(@"<manifest xmlns:android=""http://schemas.android.com/apk/res/android"" package=""com.myapp.name.here"" android:installLocation=""auto"" android:versionCode=""10001"" android:versionName=""1"">
+  <uses-sdk android:minSdkVersion=""18"" android:targetSdkVersion=""23"" />
+  <uses-permission android:name=""android.permission.CHANGE_WIFI_STATE"" />
+  <uses-permission android:name=""android.permission.ACCESS_WIFI_STATE"" />
+  <application android:label=""Scan Plan 2 Test"" android:icon="""" android:theme="""" />
+</manifest>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void Remove()
         {
             // Arrange
@@ -301,7 +333,6 @@ namespace MagicChunks.Tests.Documents
   </connectionStrings>
 </configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
-
 
         [Fact]
         public void ValidateAmpersandsEscaping2()
