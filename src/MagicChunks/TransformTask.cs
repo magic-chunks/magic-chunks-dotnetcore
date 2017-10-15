@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using MagicChunks.Core;
 
+//https://stackoverflow.com/questions/43165788/merging-net-standard-assemblies
 namespace MagicChunks
 {
     public static class TransformTask
