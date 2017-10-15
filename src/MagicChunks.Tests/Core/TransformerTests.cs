@@ -493,7 +493,7 @@ d: 4
 
 
             // Assert
-            Assert.True(result.Message?.StartsWith("Blank transformation key."));
+            Assert.True(result.Message?.StartsWith("Transformation key is empty."));
         }
 
         [Fact]
