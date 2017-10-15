@@ -29,14 +29,14 @@ namespace MagicChunks.Helpers
         {
             return source?.Elements()
                 .FirstOrDefault(e => name.IndexOf(':') == -1 ? 
-                                        String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0 :
+                                        String.Compare(e.Name.LocalName, name, StringComparison.OrdinalIgnoreCase) == 0 :
                                         e.Name == name.GetNameWithNamespace(source, String.Empty));
         }
 
         public static XElement GetChildElementByAttrValue(this XElement source, string name, string attr, string attrValue)
         {
             var elements = source.Elements()
-                .Where(e => String.Compare(e.Name.LocalName, name, StringComparison.InvariantCultureIgnoreCase) == 0);
+                .Where(e => String.Compare(e.Name.LocalName, name, StringComparison.OrdinalIgnoreCase) == 0);
 
             return elements
                 .FirstOrDefault(e => e.Attributes().Any(a => (a.Name == attr.GetNameWithNamespace(source, String.Empty)) && (a.Value == attrValue)));

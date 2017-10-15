@@ -10,14 +10,14 @@ namespace MagicChunks.Helpers
         {
             return source.Children()
                          .OfType<JProperty>()
-                         .FirstOrDefault(e => String.Compare(e.Name, name, StringComparison.InvariantCultureIgnoreCase) == 0);
+                         .FirstOrDefault(e => String.Compare(e.Name, name, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         public static JToken GetChildPropertyValue(this JObject source, string name)
         {
             return source.Children()
                          .OfType<JProperty>()
-                         .FirstOrDefault(e => String.Compare(e.Name, name, StringComparison.InvariantCultureIgnoreCase) == 0)?
+                         .FirstOrDefault(e => String.Compare(e.Name, name, StringComparison.OrdinalIgnoreCase) == 0)?
                          .Value;
         }
     }

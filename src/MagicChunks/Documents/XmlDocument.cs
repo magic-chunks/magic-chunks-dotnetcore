@@ -41,7 +41,7 @@ namespace MagicChunks.Documents
             if (current == null)
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
-            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.InvariantCultureIgnoreCase) != 0)
+            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
             current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
@@ -63,7 +63,7 @@ namespace MagicChunks.Documents
             if (current == null)
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
-            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.InvariantCultureIgnoreCase) != 0)
+            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
             current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);

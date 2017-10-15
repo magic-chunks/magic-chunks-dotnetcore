@@ -1,66 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{46171200-2F05-4582-A2FD-36AE25D67E5C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicChunks.Cake</RootNamespace>
-    <AssemblyName>MagicChunks.Cake</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <Authors>Sergey Zwezdin</Authors>
+    <Company />
+    <Product>Magic Chunks</Product>
+    <Description>Easy to use tool to config transformations for JSON, XML and YAML.</Description>
+    <Copyright>(c) Sergey Zwezdin, 2017</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/sergeyzwezdin/magic-chunks</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/logo/logo64.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/sergeyzwezdin/magic-chunks</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>Configuration, Transform, JSON, XML, YAML, YML, web.config, app.config, appsetings.json</PackageTags>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Cake.Core, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cake.Core.0.23.0\lib\net46\Cake.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Cake.Core" Version="0.23.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="MagicChunksAliases.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\MagicChunks\MagicChunks.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MagicChunks\MagicChunks.csproj">
-      <Project>{25e425cc-4f93-4bda-90ab-51853cfc54b7}</Project>
-      <Name>MagicChunks</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

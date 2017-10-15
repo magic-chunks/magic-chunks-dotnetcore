@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.ObjectFactories;
 
@@ -24,7 +25,7 @@ namespace MagicChunks.Documents
 
         public object Create(Type type)
         {
-            if (typeof(Dictionary<object, object>).IsAssignableFrom(type))
+			if (typeof(Dictionary<object, object>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
             {
                 return Activator.CreateInstance(type, new IgnoreCaseComparer());
             }
