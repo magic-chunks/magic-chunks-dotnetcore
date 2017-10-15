@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace MagicChunks.Core
 {
@@ -7,13 +6,13 @@ namespace MagicChunks.Core
     {
         public TransformationCollection()
         {
-            RemoveKeys = new List<string>();
         }
 
-        public TransformationCollection(params string[] remove)
+        public TransformationCollection(params string[] keysToRemove)
         {
-            RemoveKeys = remove.ToList();
+            KeysToRemove = keysToRemove;
         }
-        public List<string> RemoveKeys { get; }
+
+        public IEnumerable<string> KeysToRemove { get; set; }
     }
 }

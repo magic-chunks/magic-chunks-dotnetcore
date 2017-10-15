@@ -425,6 +425,58 @@ d: 4
         }
 
         [Fact]
+        public void RemoveNode()
+        {
+            // Arrange
+
+            var transform = new TransformationCollection("e")
+            {
+                { "a/y", "2" },
+                { "a/z/t/w", "3" },
+                { "#b", "5" },
+                { "c/a", "1" },
+                { "c/b", "2" },
+                { "c/b/t", "3" },
+                { "d", "4" },
+            };
+
+
+            // Act
+
+            var transformer = new Transformer();
+            string result = transformer.Transform(new JsonDocument(@"{ 
+    'a': { 
+        'x': '1'
+    },
+    'b': '2',
+    'c': '3',
+    'e': '4'
+}"), transform);
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""a"": {
+    ""x"": ""1"",
+    ""y"": ""2"",
+    ""z"": {
+      ""t"": {
+        ""w"": ""3""
+      }
+    }
+  },
+  ""c"": {
+    ""a"": ""1"",
+    ""b"": {
+      ""t"": ""3""
+    }
+  },
+  ""d"": ""4""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void ValidateTransformationKey()
         {// Arrange
 

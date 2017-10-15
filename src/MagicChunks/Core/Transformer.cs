@@ -5,98 +5,110 @@ using System.Reflection;
 
 namespace MagicChunks.Core
 {
-	public class Transformer : ITransformer
-	{
-		private static readonly IEnumerable<Type> _documentTypes;
+    public class Transformer : ITransformer
+    {
+        private static readonly IEnumerable<Type> _documentTypes;
 
-		static Transformer()
-		{
-			_documentTypes = typeof(Transformer)
-				.GetTypeInfo()
-				.Assembly
-				.DefinedTypes
-				.Where(p => !p.IsAbstract && p.ImplementedInterfaces.Contains(typeof(IDocument)))
-				.Select(p => p.AsType())
-				.ToArray();
+        static Transformer()
+        {
+            _documentTypes = typeof(Transformer)
+                .GetTypeInfo()
+                .Assembly
+                .DefinedTypes
+                .Where(p => !p.IsAbstract && p.ImplementedInterfaces.Contains(typeof(IDocument)))
+                .Select(p => p.AsType())
+                .ToArray();
 
-		}
+        }
 
-		public IEnumerable<Type> DocumentTypes => _documentTypes;
+        public IEnumerable<Type> DocumentTypes => _documentTypes;
 
-		public string Transform(string source, TransformationCollection transformations)
-		{
+        public string Transform(string source, TransformationCollection transformations)
+        {
 
-			foreach (var documentType in DocumentTypes)
-			{
-				IDocument document;
-				try
-				{
-					document = (IDocument)Activator.CreateInstance(documentType, source);
-				}
-				catch (TargetInvocationException ex)
-				{
-					if (ex.InnerException.GetType() == typeof(ArgumentException))
-						continue;
+            foreach (var documentType in DocumentTypes)
+            {
+                IDocument document;
+                try
+                {
+                    document = (IDocument)Activator.CreateInstance(documentType, source);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    if (ex.InnerException.GetType() == typeof(ArgumentException))
+                        continue;
 
-					throw;
-				}
+                    throw;
+                }
 
-				return Transform(document, transformations);
-			}
+                return Transform(document, transformations);
+            }
 
-			throw new ArgumentException("Unknown document type.", nameof(source));
-		}
+            throw new ArgumentException("Unknown document type.", nameof(source));
+        }
 
-		public string Transform<TDocument>(string source, TransformationCollection transformations) where TDocument : IDocument
-		{
-			var document = (TDocument)Activator.CreateInstance(typeof(TDocument), source);
-			return Transform(document, transformations);
-		}
+        public string Transform<TDocument>(string source, TransformationCollection transformations) where TDocument : IDocument
+        {
+            var document = (TDocument)Activator.CreateInstance(typeof(TDocument), source);
+            return Transform(document, transformations);
+        }
 
-		public string Transform(Type documentType, string source, TransformationCollection transformations)
-		{
-			IDocument document;
-			try
-			{
-				document = (IDocument)Activator.CreateInstance(documentType, source);
-			}
-			catch (TargetInvocationException ex)
-			{
-				if (ex.InnerException.GetType() == typeof(ArgumentException))
-					throw new ArgumentException("Unknown document type.", nameof(source), ex);
+        public string Transform(Type documentType, string source, TransformationCollection transformations)
+        {
+            IDocument document;
+            try
+            {
+                document = (IDocument)Activator.CreateInstance(documentType, source);
+            }
+            catch (TargetInvocationException ex)
+            {
+                if (ex.InnerException.GetType() == typeof(ArgumentException))
+                    throw new ArgumentException("Unknown document type.", nameof(source), ex);
 
-				throw;
-			}
+                throw;
+            }
 
-			return Transform(document, transformations);
-		}
-		public string Transform(IDocument source, TransformationCollection transformations)
-		{
-			foreach (var key in transformations.RemoveKeys)
-			{
-				if (String.IsNullOrWhiteSpace(key))
-					throw new ArgumentException("Blank transformation key.", nameof(transformations));
-				source.RemoveKey(SplitKey(key));
-			}
+            return Transform(document, transformations);
+        }
 
-			foreach (var transformation in transformations)
-			{
-				if (String.IsNullOrWhiteSpace(transformation.Key))
-					throw new ArgumentException("Blank transformation key.", nameof(transformations));
+        public string Transform(IDocument source, TransformationCollection transformations)
+        {
+            if (transformations.KeysToRemove != null)
+            {
+                foreach (var key in transformations.KeysToRemove)
+                {
+                    if (String.IsNullOrWhiteSpace(key))
+                        throw new ArgumentNullException("Transformation key is empty.", nameof(transformations));
 
-				source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
-			}
+                    source.RemoveKey(SplitKey(key));
+                }
+            }
 
-			return source.ToString();
-		}
+            foreach (var transformation in transformations)
+            {
+                if (String.IsNullOrWhiteSpace(transformation.Key))
+                    throw new ArgumentException("Transformation key is empty.", nameof(transformations));
 
-		private static string[] SplitKey(string key)
-		{
-			return key.Trim().Split('/').Select(x => x.Trim()).ToArray();
-		}
+                if (!transformation.Key.StartsWith("#"))
+                {
+                    source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
+                }
+                else
+                {
+                    source.RemoveKey(SplitKey(transformation.Key.TrimStart('#')));
+                }
+            }
 
-		public void Dispose()
-		{
-		}
-	}
+            return source.ToString();
+        }
+
+        private static string[] SplitKey(string key)
+        {
+            return key.Trim().Split('/').Select(x => x.Trim()).ToArray();
+        }
+
+        public void Dispose()
+        {
+        }
+    }
 }
