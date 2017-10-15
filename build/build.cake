@@ -139,13 +139,13 @@ Task("Build")
     .Does(() => {
         MSBuild(paths.workingDirSolutionPath, new MSBuildSettings {
             Verbosity = Verbosity.Minimal,
-            ToolVersion = MSBuildToolVersion.VS2015,
+            ToolVersion = MSBuildToolVersion.VS2017,
             Configuration = configuration,
             PlatformTarget = PlatformTarget.MSIL,
         }.WithTarget("Build"));
 
-        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks" + "/bin/" + configuration + "/MagicChunks*.dll", paths.workingDirDotNet);
-        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/MagicChunks*.dll", paths.workingDirDotNet);
+        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks" + "/bin/" + configuration + "/netstandard1.3/MagicChunks*.dll", paths.workingDirDotNet);
+        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/netstandard1.6/MagicChunks*.dll", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/MSBuild/*.targets", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/Powershell/*.ps*", paths.workingDirDotNet);
     });
@@ -167,11 +167,13 @@ Task("PackNuget")
     .Description("Packs library into Nuget package")
     .IsDependentOn("Build")
     .Does(() => {
-        var lib = paths.workingDirNuget + "/Net45/MagicChunks";
-        EnsureDirectoryExists(lib);
+        EnsureDirectoryExists(paths.workingDirNuget + "/netstandard1.3/MagicChunks");
+        EnsureDirectoryExists(paths.workingDirNuget + "/netstandard1.6/MagicChunks");
         
         CopyFiles(resolveDirectoryPath(paths.workingDirSources + "/nuspecs") + "/*.nuspec", paths.workingDirNuget);
-        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/Net45/MagicChunks");
+        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");
+        DeleteFile(paths.workingDirNuget + "/netstandard1.3/MagicChunks/MagicChunks.Cake.dll");
+        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.6/MagicChunks");
 
         foreach (string file in System.IO.Directory.EnumerateFiles(paths.workingDirNuget, "*.nuspec"))
         {
