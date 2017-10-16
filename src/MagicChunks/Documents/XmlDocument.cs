@@ -27,6 +27,28 @@ namespace MagicChunks.Documents
             }
         }
 
+        public void AddElementToArray(string[] path, string value)
+        {
+            if ((path == null) || (path.Any() == false))
+                throw new ArgumentException("Path is not speicified.", nameof(path));
+
+            if (path.Any(String.IsNullOrWhiteSpace))
+                throw new ArgumentException("There is empty items in the path.", nameof(path));
+
+            XElement current = Document.Root;
+            string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
+
+            if (current == null)
+                throw new ArgumentException("Root element is not present.", nameof(path));
+
+            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
+                throw new ArgumentException("Root element name does not match path.", nameof(path));
+
+            current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+
+            UpdateTargetArrayElement(value, path.Last(), current, documentNamespace);
+        }
+
         public void ReplaceKey(string[] path, string value)
         {
             if ((path == null) || (path.Any() == false))
@@ -128,6 +150,36 @@ namespace MagicChunks.Documents
             {   // Filtered element update
                 current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
                 current.Value = value;
+            }
+        }
+
+        private static void UpdateTargetArrayElement(string value, string targetElement, XElement current, string documentNamespace)
+        {
+            var attributeFilterMatch = AttributeFilterRegex.Match(targetElement);
+
+            if (!attributeFilterMatch.Success)
+            {   // Property update
+                var elementToUpdate = current.GetChildElementByName(targetElement);
+
+                if (elementToUpdate != null)
+                {
+                    elementToUpdate.Add(XElement.Parse(value));
+                }
+                else
+                {
+                    if (!current.HasElements)
+                        current.SetValue("");
+
+                    elementToUpdate = new XElement(targetElement.GetNameWithNamespace(current, documentNamespace));
+                    current.Add(elementToUpdate);
+
+                    elementToUpdate.Add(XElement.Parse(value));
+                }
+            }
+            else
+            {   // Filtered element update
+                current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
+                current.Add(XElement.Parse(value));
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MagicChunks.Documents;
 using Xunit;
 
@@ -152,6 +152,81 @@ namespace MagicChunks.Tests.Documents
       }
     }
   }
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void AddStringElementToArray()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'a': { 
+        'x': '1'
+    },
+    'b': '2',
+    'c': '3',
+    'd': []
+}");
+
+
+            // Act
+
+            document.AddElementToArray(new[] { "d" }, "1");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""a"": {
+    ""x"": ""1""
+  },
+  ""b"": ""2"",
+  ""c"": ""3"",
+  ""d"": [
+    ""1""
+  ]
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void AddObjectElementToArray()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'a': { 
+        'x': '1'
+    },
+    'b': '2',
+    'c': '3',
+    'd': []
+}");
+
+
+            // Act
+
+            document.AddElementToArray(new[] { "d" }, "{ 'val1': '1', 'val2': '2' }");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""a"": {
+    ""x"": ""1""
+  },
+  ""b"": ""2"",
+  ""c"": ""3"",
+  ""d"": [
+    {
+      ""val1"": ""1"",
+      ""val2"": ""2""
+    }
+  ]
 }", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 

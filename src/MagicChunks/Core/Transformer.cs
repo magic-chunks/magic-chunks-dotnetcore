@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MagicChunks.Core
 {
     public class Transformer : ITransformer
     {
+        private static readonly Regex RemoveEndingRegex = new Regex(@"\`\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        private static readonly Regex RemoveArrayEndingRegex = new Regex(@"\[\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         private static readonly IEnumerable<Type> _documentTypes;
 
         static Transformer()
@@ -89,13 +94,17 @@ namespace MagicChunks.Core
                 if (String.IsNullOrWhiteSpace(transformation.Key))
                     throw new ArgumentException("Transformation key is empty.", nameof(transformations));
 
-                if (!transformation.Key.StartsWith("#"))
+                if (transformation.Key.StartsWith("#"))
                 {
-                    source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
+                    source.RemoveKey(SplitKey(transformation.Key.TrimStart('#')));
+                }
+                else if (RemoveEndingRegex.Replace(transformation.Key, String.Empty).EndsWith("[]"))
+                {
+                    source.AddElementToArray(SplitKey(transformation.Key), transformation.Value);
                 }
                 else
                 {
-                    source.RemoveKey(SplitKey(transformation.Key.TrimStart('#')));
+                    source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
                 }
             }
 
@@ -104,7 +113,7 @@ namespace MagicChunks.Core
 
         private static string[] SplitKey(string key)
         {
-            return key.Trim().Split('/').Select(x => x.Trim()).ToArray();
+            return RemoveArrayEndingRegex.Replace(RemoveEndingRegex.Replace(key.Trim(), String.Empty), String.Empty).Split('/').Select(x => x.Trim()).ToArray();
         }
 
         public void Dispose()

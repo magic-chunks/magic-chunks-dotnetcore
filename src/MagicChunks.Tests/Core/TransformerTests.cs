@@ -12,7 +12,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection("e")
+            var transform = new TransformationCollection()
             {
                 { "a/y", "2" },
                 { "a/z/t/w", "3" },
@@ -21,6 +21,9 @@ namespace MagicChunks.Tests.Core
                 { "c/b", "2" },
                 { "c/b/t", "3" },
                 { "d", "4" },
+                { "#e", "" },
+                { "f/items[]`1", "1" },
+                { "f/items[]`2", "2" }
             };
 
 
@@ -56,7 +59,13 @@ namespace MagicChunks.Tests.Core
       ""t"": ""3""
     }
   },
-  ""d"": ""4""
+  ""d"": ""4"",
+  ""f"": {
+    ""items"": [
+      ""1"",
+      ""2""
+    ]
+  }
 }", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
@@ -118,7 +127,7 @@ namespace MagicChunks.Tests.Core
         {
             // Arrange
 
-            var transform = new TransformationCollection("xml/g")
+            var transform = new TransformationCollection()
             {
                 { "xml/a/y", "2" },
                 { "xml/a/@y", "3" },
@@ -133,6 +142,11 @@ namespace MagicChunks.Tests.Core
                 { "xml/f/item[@key = 'item2']/val", "7" },
                 { "xml/f/item[@key=\"item3\"]/val", "8" },
                 { "xml/d", "4" },
+                { "#xml/g", "" },
+                { "xml/items[]`1", "<val>1</val>" },
+                { "xml/items[]`2", "<val>2</val>" },
+                { "xml/data[]`1", "<x>1</x>" },
+                { "xml/data[]`2", "<y>2</y>" },
             };
 
 
@@ -164,6 +178,7 @@ namespace MagicChunks.Tests.Core
 <g>
     <x></x>
 </g>
+<items />
 </xml>"), transform);
 
 
@@ -202,7 +217,15 @@ namespace MagicChunks.Tests.Core
       <val>8</val>
     </item>
   </f>
+  <items>
+    <val>1</val>
+    <val>2</val>
+  </items>
   <d>4</d>
+  <data>
+    <x>1</x>
+    <y>2</y>
+  </data>
 </xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
@@ -348,6 +371,8 @@ namespace MagicChunks.Tests.Core
                 { "c/b", "2" },
                 { "c/b/t", "3" },
                 { "d", "4" },
+                { "f[]`1", "1" },
+                { "f[]`2", "2" }
             };
 
 
@@ -376,6 +401,9 @@ c:
   b:
     t: 3
 d: 4
+f:
+- 1
+- 2
 ", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 

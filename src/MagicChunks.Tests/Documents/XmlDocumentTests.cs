@@ -253,6 +253,48 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void AddElementToArray()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<xml>
+<a>
+  <x>1</x>
+</a>
+<b>2</b>
+<c>3</c>
+<d />
+</xml>");
+
+
+            // Act
+
+            document.AddElementToArray(new[] { "xml", "d" }, "<val>1</val>");
+            document.AddElementToArray(new[] { "xml", "d" }, "<val>2</val>");
+            document.AddElementToArray(new[] { "xml", "f" }, "<x>1</x>");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<xml>
+  <a>
+    <x>1</x>
+  </a>
+  <b>2</b>
+  <c>3</c>
+  <d>
+    <val>1</val>
+    <val>2</val>
+  </d>
+  <f>
+    <x>1</x>
+  </f>
+</xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void Remove()
         {
             // Arrange
