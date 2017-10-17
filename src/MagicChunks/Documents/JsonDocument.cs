@@ -98,7 +98,11 @@ namespace MagicChunks.Documents
                 var element = current.GetChildPropertyValue(pathElement);
                 if (element is JObject)
                 {
-                    current = (JObject) element;
+                    current = (JObject)element;
+                }
+                else if (element is JArray)
+                {
+                    throw new NotSupportedException();
                 }
                 else
                 {

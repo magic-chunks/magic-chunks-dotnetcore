@@ -8,10 +8,11 @@ namespace MagicChunks.Helpers
     public static class JsonExtensions
     {
         private static readonly Regex NodeIndexEndingRegex = new Regex(@"\[\d+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex NodeArrayEndingRegex = new Regex(@"\[\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         private static readonly Regex NodeValueEndingRegex = new Regex(@"\[\@.+\=.+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         private static readonly Regex NodeValueRegex = new Regex(@"^\@(.+)\=(.+)$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        public static JToken GetChildProperty(this JObject source, string name)
+        public static JToken GetChildProperty(this JContainer source, string name)
         {
             if (NodeIndexEndingRegex.IsMatch(name))
             {
@@ -79,7 +80,7 @@ namespace MagicChunks.Helpers
             }
         }
 
-        public static JToken GetChildPropertyValue(this JObject source, string name)
+        public static JToken GetChildPropertyValue(this JContainer source, string name)
         {
             if (NodeIndexEndingRegex.IsMatch(name))
             {
@@ -114,6 +115,16 @@ namespace MagicChunks.Helpers
                     .FirstOrDefault();
 
                 return elements.Skip(nodeIndex).FirstOrDefault();
+            }
+            else if (NodeArrayEndingRegex.IsMatch(name))
+            {
+                string nodeName = NodeArrayEndingRegex.Replace(name, String.Empty);
+
+                return source.Children()
+                    .OfType<JProperty>()
+                    .FirstOrDefault(e => String.Compare(e.Name, nodeName, StringComparison.OrdinalIgnoreCase) == 0)?
+                    .Children()
+                    .FirstOrDefault();
             }
             else if (NodeValueEndingRegex.IsMatch(name))
             {
