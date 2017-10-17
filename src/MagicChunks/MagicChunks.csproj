@@ -29,6 +29,7 @@
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Threading" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
   </ItemGroup>
 

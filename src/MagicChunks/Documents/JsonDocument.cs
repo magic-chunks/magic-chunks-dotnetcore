@@ -12,6 +12,8 @@ namespace MagicChunks.Documents
     public class JsonDocument : IDocument
     {
         private static readonly Regex JsonObjectRegex = new Regex(@"^{.+}$$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex NodeIndexEndingRegex = new Regex(@"\[\d+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex NodeValueEndingRegex = new Regex(@"\[\@.+\=.+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         protected readonly JObject Document;
 
         public JsonDocument(string source)
@@ -76,7 +78,17 @@ namespace MagicChunks.Documents
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
             current = FindPath(path.Take(path.Length - 1), current);
-            current.Remove(path.Last());
+            var pathEnding = path.Last();
+            if (NodeIndexEndingRegex.IsMatch(pathEnding) || NodeValueEndingRegex.IsMatch(pathEnding))
+            {
+                // Remove item from array
+                current.GetChildPropertyValue(pathEnding)?.Remove();
+            }
+            else
+            {
+                // Remove property
+                current.Remove(pathEnding);
+            }
         }
 
         private static JObject FindPath(IEnumerable<string> path, JObject current)
@@ -99,7 +111,7 @@ namespace MagicChunks.Documents
 
         private static void UpdateTargetArrayElement(JObject current, string targetElementName, string value)
         {
-            var targetElement = current.GetChildProperty(targetElementName);
+            var targetElement = current.GetChildProperty(targetElementName) as JProperty;
             if ((targetElement != null) && (targetElement is JProperty) && (targetElement.Value is JArray))
             {
                 if (JsonObjectRegex.IsMatch(value.Trim()))
@@ -131,8 +143,16 @@ namespace MagicChunks.Documents
         private static void UpdateTargetElement(JObject current, string targetElementName, string value)
         {
             var targetElement = current.GetChildProperty(targetElementName);
-            if (targetElement != null)
-                targetElement.Value = value;
+            if (targetElement is JProperty)
+                ((JProperty)targetElement).Value = value;
+            else if (targetElement is JObject)
+            {
+                var targetValue = JsonConvert.DeserializeObject(value) as JObject;
+                if (targetValue != null)
+                    ((JObject)targetElement).Replace(targetValue);
+                else
+                    throw new ArgumentException("Value is not valid JSON object.", nameof(value));
+            }
             else
                 current.Add(targetElementName, value);
         }

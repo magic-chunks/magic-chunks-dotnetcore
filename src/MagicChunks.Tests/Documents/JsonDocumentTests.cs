@@ -156,6 +156,106 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformByIndex()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'items': [
+        { 'i': 0, data: 'AA' },
+        { 'i': 1, data: 'BB' },
+        { 'i': 2, data: 'CC' },
+        { 'i': 3, data: 'DD' },
+    ],
+    'b': '2',
+    'c': '3'
+}");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "items[2]", "data" }, "AA");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""items"": [
+    {
+      ""i"": 0,
+      ""data"": ""AA""
+    },
+    {
+      ""i"": 1,
+      ""data"": ""BB""
+    },
+    {
+      ""i"": 2,
+      ""data"": ""AA""
+    },
+    {
+      ""i"": 3,
+      ""data"": ""DD""
+    }
+  ],
+  ""b"": ""2"",
+  ""c"": ""3""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformByNodeValue()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'items': [
+        { 'i': 0, data: 'AA' },
+        { 'i': 1, data: 'BB' },
+        { 'i': 2, data: 'CC' },
+        { 'i': 3, data: 'DD' },
+    ],
+    'b': '2',
+    'c': '3'
+}");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "items[@i=1]", "data" }, "EE");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""items"": [
+    {
+      ""i"": 0,
+      ""data"": ""AA""
+    },
+    {
+      ""i"": 1,
+      ""data"": ""EE""
+    },
+    {
+      ""i"": 2,
+      ""data"": ""CC""
+    },
+    {
+      ""i"": 3,
+      ""data"": ""DD""
+    }
+  ],
+  ""b"": ""2"",
+  ""c"": ""3""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void AddStringElementToArray()
         {
             // Arrange
@@ -258,6 +358,52 @@ namespace MagicChunks.Tests.Documents
 
             Assert.Equal(@"{
   ""b"": {},
+  ""c"": ""3""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void RemoveArrayItem()
+        {
+            // Arrange
+
+            var document = new JsonDocument(@"{ 
+    'items': [
+        { 'i': 0, data: 'AA' },
+        { 'i': 1, data: 'BB' },
+        { 'i': 2, data: 'CC' },
+        { 'i': 3, data: 'DD' },
+    ],
+    'b': '2',
+    'c': '3'
+}");
+
+
+            // Act
+
+            document.RemoveKey(new[] { "items[2]" });
+            document.RemoveKey(new[] { "items[@i=1]", "data" });
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""items"": [
+    {
+      ""i"": 0,
+      ""data"": ""AA""
+    },
+    {
+      ""i"": 1
+    },
+    {
+      ""i"": 3,
+      ""data"": ""DD""
+    }
+  ],
+  ""b"": ""2"",
   ""c"": ""3""
 }", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }

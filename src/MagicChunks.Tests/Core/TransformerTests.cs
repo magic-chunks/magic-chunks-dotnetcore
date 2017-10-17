@@ -123,6 +123,57 @@ namespace MagicChunks.Tests.Core
         }
 
         [Fact]
+        public void TransformJsonByIndex()
+        {
+            // Arrange
+
+            var transform = new TransformationCollection()
+            {
+                { "items[2]/data", "EE" },
+                { "items[@i='1']/data", "FF" },
+                { "#items[0]", "" },
+                { "#items[@i='1']/x", "" },
+                { "items[@i='3']", "{ y: '20' }" },
+                { "items[0]", "{ x: '40' }" },
+            };
+
+
+            // Act
+
+            var transformer = new Transformer();
+            string result = transformer.Transform(new JsonDocument(@"{ 
+    'items': [
+        { 'i': 0, data: 'AA' },
+        { 'i': 1, data: 'BB', x: '25' },
+        { 'i': 2, data: 'CC' },
+        { 'i': 3, data: 'DD' },
+    ],
+    'b': '2',
+    'c': '3'
+}"), transform);
+
+
+            // Assert
+
+            Assert.Equal(@"{
+  ""items"": [
+    {
+      ""x"": ""40""
+    },
+    {
+      ""i"": 2,
+      ""data"": ""EE""
+    },
+    {
+      ""y"": ""20""
+    }
+  ],
+  ""b"": ""2"",
+  ""c"": ""3""
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void TransformXml()
         {
             // Arrange
