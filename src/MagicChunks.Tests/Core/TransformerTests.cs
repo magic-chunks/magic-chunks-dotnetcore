@@ -322,6 +322,44 @@ namespace MagicChunks.Tests.Core
         }
 
         [Fact]
+        public void TransformXmlByIndex()
+        {
+            // Arrange
+
+            var transform = new TransformationCollection()
+            {
+                { "info/param[1]/option", "DD" },
+            };
+
+
+            // Act
+
+            var transformer = new Transformer();
+            string result = transformer.Transform(new XmlDocument(@"<info>
+    <param>
+        <option>AA</option>
+    </param>
+    <param>
+        <option>BB</option>
+        <argument>CC</argument>
+    </param>
+</info>"), transform);
+
+
+            // Assert
+
+            Assert.Equal(@"<info>
+    <param>
+        <option>AA</option>
+    </param>
+    <param>
+        <option>DD</option>
+        <argument>CC</argument>
+    </param>
+</info>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void TransformXmlWithNamespace()
         {
             // Arrange

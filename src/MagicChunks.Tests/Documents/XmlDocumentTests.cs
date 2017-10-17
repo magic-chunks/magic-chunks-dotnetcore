@@ -39,18 +39,18 @@ namespace MagicChunks.Tests.Documents
 
             // Act
 
-            document.ReplaceKey(new[] {"xml", "a", "y"}, "2");
-            document.ReplaceKey(new[] {"xml", "a", "@y"}, "3");
-            document.ReplaceKey(new[] {"xml", "a", "z", "t", "w"}, "3");
-            document.ReplaceKey(new[] {"xml", "b"}, "5");
-            document.ReplaceKey(new[] {"xml", "c", "a"}, "1");
-            document.ReplaceKey(new[] {"xml", "c", "b"}, "2");
-            document.ReplaceKey(new[] {"xml", "c", "b", "t"}, "3");
-            document.ReplaceKey(new[] {"xml", "e", "item[@key = 'item2']" }, "5");
-            document.ReplaceKey(new[] {"xml", "e", "item[@key=\"item3\"]" }, "6");
-            document.ReplaceKey(new[] {"xml", "f", "item[@key = 'item2']", "val"}, "7");
-            document.ReplaceKey(new[] {"xml", "f", "item[@key=\"item3\"]", "val"}, "8");
-            document.ReplaceKey(new[] {"xml", "d"}, "4");
+            document.ReplaceKey(new[] { "xml", "a", "y" }, "2");
+            document.ReplaceKey(new[] { "xml", "a", "@y" }, "3");
+            document.ReplaceKey(new[] { "xml", "a", "z", "t", "w" }, "3");
+            document.ReplaceKey(new[] { "xml", "b" }, "5");
+            document.ReplaceKey(new[] { "xml", "c", "a" }, "1");
+            document.ReplaceKey(new[] { "xml", "c", "b" }, "2");
+            document.ReplaceKey(new[] { "xml", "c", "b", "t" }, "3");
+            document.ReplaceKey(new[] { "xml", "e", "item[@key = 'item2']" }, "5");
+            document.ReplaceKey(new[] { "xml", "e", "item[@key=\"item3\"]" }, "6");
+            document.ReplaceKey(new[] { "xml", "f", "item[@key = 'item2']", "val" }, "7");
+            document.ReplaceKey(new[] { "xml", "f", "item[@key=\"item3\"]", "val" }, "8");
+            document.ReplaceKey(new[] { "xml", "d" }, "4");
 
             var result = document.ToString();
 
@@ -92,6 +92,42 @@ namespace MagicChunks.Tests.Documents
   </f>
   <d>4</d>
 </xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformByIndex()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<info>
+    <param>
+        <option>AA</option>
+    </param>
+    <param>
+        <option>BB</option>
+        <argument>CC</argument>
+    </param>
+</info>");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "info", "param[1]", "option" }, "DD");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<info>
+    <param>
+        <option>AA</option>
+    </param>
+    <param>
+        <option>DD</option>
+        <argument>CC</argument>
+    </param>
+</info>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
