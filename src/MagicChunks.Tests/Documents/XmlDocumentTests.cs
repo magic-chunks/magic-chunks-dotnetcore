@@ -107,6 +107,9 @@ namespace MagicChunks.Tests.Documents
         <option>BB</option>
         <argument>CC</argument>
     </param>
+    <param>
+        <option>DD</option>
+    </param>
 </info>");
 
 
@@ -127,6 +130,103 @@ namespace MagicChunks.Tests.Documents
         <option>DD</option>
         <argument>CC</argument>
     </param>
+    <param>
+        <option>DD</option>
+    </param>
+</info>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformByIndex2()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<info>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""2"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+</info>");
+
+
+            // Act
+
+            document.ReplaceKey(new[] { "info", "val[@x=\"2\"]", "param[1]", "option" }, "DD");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<info>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""2"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>DD</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
 </info>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
@@ -348,9 +448,9 @@ namespace MagicChunks.Tests.Documents
 
             // Act
 
-            document.RemoveKey(new[] { "xml", "a"});
-            document.RemoveKey(new[] { "xml", "b", "x"});
-            document.RemoveKey(new[] { "xml", "c", "@key"});
+            document.RemoveKey(new[] { "xml", "a" });
+            document.RemoveKey(new[] { "xml", "b", "x" });
+            document.RemoveKey(new[] { "xml", "c", "@key" });
 
             var result = document.ToString();
 
@@ -361,6 +461,97 @@ namespace MagicChunks.Tests.Documents
     <b />
     <c foo=""bar"">3</c>
 </xml>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void RemoveByIndex()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<info>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""2"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+</info>");
+
+
+            // Act
+
+            document.RemoveKey(new[] { "info", "val[@x=\"2\"]", "param[1]", "option" });
+            document.RemoveKey(new[] { "info", "val[@x=\"1\"]", "param[2]" });
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<info>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+    </val>
+    <val x=""2"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+    <val x=""1"">
+        <param>
+            <option>AA</option>
+        </param>
+        <param>
+            <option>BB</option>
+            <argument>CC</argument>
+        </param>
+        <param>
+            <option>DD</option>
+        </param>
+    </val>
+</info>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
