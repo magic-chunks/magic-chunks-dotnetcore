@@ -206,7 +206,7 @@ namespace MagicChunks.Documents
 
         public override string ToString()
         {
-            return Document?.ToString(SaveOptions.None) ?? String.Empty;
+            return Document?.ToStringWithDeclaration() ?? String.Empty;
         }
 
         public void Dispose()

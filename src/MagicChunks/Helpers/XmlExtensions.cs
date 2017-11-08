@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
@@ -8,6 +10,31 @@ namespace MagicChunks.Helpers
     public static class XmlExtensions
     {
         private static readonly Regex NodeIndexEndingRegex = new Regex(@"\[\d+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+        public static string ToStringWithDeclaration(this XDocument document)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            return document.ToStringWithDeclaration(SaveOptions.None);
+        }
+
+        public static string ToStringWithDeclaration(this XDocument document, SaveOptions options)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            var newLine = (options & SaveOptions.DisableFormatting) == SaveOptions.DisableFormatting ? string.Empty : Environment.NewLine;
+
+            return
+                document.Declaration == null ?
+                    document.ToString(options) :
+                    document.Declaration + newLine + document.ToString(options);
+        }
 
         public static XName GetNameWithNamespace(this string name, XElement element, string defaultNamespace)
         {
