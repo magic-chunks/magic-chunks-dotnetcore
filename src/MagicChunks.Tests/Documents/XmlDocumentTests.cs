@@ -231,6 +231,29 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformWithXmlHeader()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<foo>
+</foo>");
+
+
+            // Act
+
+//            document.ReplaceKey(new[] { "foo/@value" }, "foo");
+
+            var result = document.ToString();
+
+
+            // Assert
+
+            Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<foo></foo>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void TransformWithNamesapce()
         {
             // Arrange
