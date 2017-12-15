@@ -648,5 +648,37 @@ namespace MagicChunks.Tests.Documents
   </connectionStrings>
 </configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
+
+        [Fact]
+        public void TransformWithColonInAttributeName()
+        {
+            // Arrange
+            var document = new XmlDocument(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <appSettings>
+    <add key=""Auth:Environment"" value=""Testing"" />
+    <add key=""Auth:Credential"" value=""abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"" />
+    <add key=""Auth:Type"" value=""Basic"" />
+  </appSettings>
+</configuration>");
+            
+            document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key = 'Auth:Environment']", "@value" }, "Production");
+            document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Credential\"]", "@value" }, "XqoL6MXqOPeGTxXrJsQA7gK5cXLvnlSYJUtAwFWbRo7GDkbsSu");
+            document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Type\"]", "@value" }, "Bearer");
+
+            var result = document.ToString();
+
+
+            // Assert
+            Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <appSettings>
+    <add key=""Auth:Environment"" value=""Production"" />
+    <add key=""Auth:Credential"" value=""XqoL6MXqOPeGTxXrJsQA7gK5cXLvnlSYJUtAwFWbRo7GDkbsSu"" />
+    <add key=""Auth:Type"" value=""Bearer"" />
+  </appSettings>
+</configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
     }
 }

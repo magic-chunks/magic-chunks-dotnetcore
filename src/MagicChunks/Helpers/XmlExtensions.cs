@@ -43,7 +43,7 @@ namespace MagicChunks.Helpers
                 result = XName.Get(name, defaultNamespace);
             else
             {
-                var attributeNameParts = name.Split(':');
+                var attributeNameParts = name.Split(':');                
                 var attributeNamespace = element.GetNamespaceOfPrefix(attributeNameParts[0]);
                 if (attributeNamespace != null)
                     result = XName.Get(attributeNameParts[1], attributeNamespace.NamespaceName);
@@ -58,8 +58,10 @@ namespace MagicChunks.Helpers
         {
             if (!NodeIndexEndingRegex.IsMatch(name))
             {
+                bool isElementNameWithNamespace = name.IndexOf(':') > 0 && !(name.Split(':')[0].Contains("'") || (name.Split(':')[0].Contains(@"""")));
+
                 return source?.Elements()
-                    .FirstOrDefault(e => name.IndexOf(':') == -1 ?
+                    .FirstOrDefault(e => !isElementNameWithNamespace ?
                                             String.Compare(e.Name.LocalName, name, StringComparison.OrdinalIgnoreCase) == 0 :
                                             e.Name == name.GetNameWithNamespace(source, String.Empty));
             }
