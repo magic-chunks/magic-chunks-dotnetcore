@@ -659,12 +659,14 @@ namespace MagicChunks.Tests.Documents
     <add key=""Auth:Environment"" value=""Testing"" />
     <add key=""Auth:Credential"" value=""abcefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"" />
     <add key=""Auth:Type"" value=""Basic"" />
+    <add key=""Auth:Provider:Name"" value=""Name"" />
   </appSettings>
 </configuration>");
             
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key = 'Auth:Environment']", "@value" }, "Production");
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Credential\"]", "@value" }, "XqoL6MXqOPeGTxXrJsQA7gK5cXLvnlSYJUtAwFWbRo7GDkbsSu");
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Type\"]", "@value" }, "Bearer");
+            document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Provider:Name\"]", "@value" }, "ABC");
 
             var result = document.ToString();
 
@@ -676,6 +678,7 @@ namespace MagicChunks.Tests.Documents
     <add key=""Auth:Environment"" value=""Production"" />
     <add key=""Auth:Credential"" value=""XqoL6MXqOPeGTxXrJsQA7gK5cXLvnlSYJUtAwFWbRo7GDkbsSu"" />
     <add key=""Auth:Type"" value=""Bearer"" />
+    <add key=""Auth:Provider:Name"" value=""ABC"" />
   </appSettings>
 </configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
