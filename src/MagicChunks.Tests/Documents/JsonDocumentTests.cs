@@ -202,34 +202,36 @@ namespace MagicChunks.Tests.Documents
             // Assert
 
             Assert.Equal(@"{
-""bindings"": [
-{
-    ""type"": ""httpTrigger"",
-    ""direction"": ""in"",
-    ""webHookType"": ""genericJson"",
-    ""name"": ""req""
-},
-{
-    ""type"": ""http"",
-    ""direction"": ""out"",
-    ""name"": ""res""
-},
-{
-    ""type"": ""blob"",
-    ""name"": ""name2"",
-    ""path"": ""path2"",
-    ""connection"": ""test"",
-    ""direction"": ""in""
-},
-{
-    ""type"": ""blob"",
-    ""name"": ""name2"",
-    ""path"": ""path2"",
-    ""connection"": ""test"",
-    ""direction"": ""in""
-}
-],
-""disabled"": false
+  ""bindings"": [
+    {
+      ""type"": ""httpTrigger"",
+      ""direction"": ""in"",
+      ""webHookType"": ""genericJson"",
+      ""name"": ""req"",
+      ""connection"": ""test""
+    },
+    {
+      ""type"": ""http"",
+      ""direction"": ""out"",
+      ""name"": ""res"",
+      ""connection"": ""test""
+    },
+    {
+      ""type"": ""blob"",
+      ""name"": ""name2"",
+      ""path"": ""path2"",
+      ""connection"": ""test"",
+      ""direction"": ""in""
+    },
+    {
+      ""type"": ""blob"",
+      ""name"": ""name2"",
+      ""path"": ""path2"",
+      ""connection"": ""test"",
+      ""direction"": ""in""
+    }
+  ],
+  ""disabled"": false
 }", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 

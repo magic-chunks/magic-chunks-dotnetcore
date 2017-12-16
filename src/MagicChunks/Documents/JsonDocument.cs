@@ -105,10 +105,12 @@ namespace MagicChunks.Documents
 
         private static IEnumerable<JObject> FindPath(IEnumerable<string> path, JObject current)
         {
+            var pathElements = new Queue<string>(path);
+
             foreach (string pathElement in path)
             {
-                // For now we're iterating linear through the path
-                // Need to keep ability to return multiplie values
+                pathElements.Dequeue();
+
                 var element = current.GetChildPropertyValue(pathElement).FirstOrDefault();
                 if (element is JObject)
                 {
@@ -116,12 +118,12 @@ namespace MagicChunks.Documents
                 }
                 else if (element is JArray)
                 {
-                    throw new NotSupportedException();
+                    return ((JArray)element).SelectMany(arrayElement => FindPath(pathElements.ToArray(), arrayElement as JObject)).ToArray();
                 }
                 else
                 {
                     current[pathElement] = new JObject();
-                    current = (JObject) current[pathElement];
+                    current = (JObject)current[pathElement];
                 }
             }
             return new JObject[] { current };
