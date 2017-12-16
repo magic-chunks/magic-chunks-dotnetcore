@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
@@ -80,7 +81,7 @@ namespace MagicChunks.Helpers
             }
         }
 
-        public static JToken GetChildPropertyValue(this JContainer source, string name)
+        public static IEnumerable<JToken> GetChildPropertyValue(this JContainer source, string name)
         {
             if (NodeIndexEndingRegex.IsMatch(name))
             {
@@ -110,11 +111,14 @@ namespace MagicChunks.Helpers
 
                 var elements = source.Children()
                     .OfType<JProperty>()
-                    .FirstOrDefault(e => String.Compare(e.Name, nodeName, StringComparison.OrdinalIgnoreCase) == 0)?
-                    .Children()
-                    .FirstOrDefault();
+                    .Where(e => String.Compare(e.Name, nodeName, StringComparison.OrdinalIgnoreCase) == 0)?
+                    .Select(e => e.Children()
+                        .FirstOrDefault()
+                        .Skip(nodeIndex)
+                        .FirstOrDefault())
+                    .Where(e => e != null);
 
-                return elements.Skip(nodeIndex).FirstOrDefault();
+                return elements.ToArray();
             }
             else if (NodeArrayEndingRegex.IsMatch(name))
             {
@@ -122,9 +126,10 @@ namespace MagicChunks.Helpers
 
                 return source.Children()
                     .OfType<JProperty>()
-                    .FirstOrDefault(e => String.Compare(e.Name, nodeName, StringComparison.OrdinalIgnoreCase) == 0)?
-                    .Children()
-                    .FirstOrDefault();
+                    .Where(e => String.Compare(e.Name, nodeName, StringComparison.OrdinalIgnoreCase) == 0)?
+                    .Select(e => e.Children()
+                        .FirstOrDefault())
+                    .ToArray();
             }
             else if (NodeValueEndingRegex.IsMatch(name))
             {
@@ -138,7 +143,7 @@ namespace MagicChunks.Helpers
                     .FirstOrDefault()
                     .OfType<JObject>();
 
-                return elements.FirstOrDefault(e =>
+                return elements.Where(e =>
                 {
                     if ((e.GetChildProperty(nodeSelector.paramName) as JProperty)?.Value is JValue)
                     {
@@ -148,14 +153,16 @@ namespace MagicChunks.Helpers
                     {
                         return false;
                     }
-                });
+                }).ToArray();
             }
             else
             {
-                return source.Children()
+                return new[] {
+                    source.Children()
                          .OfType<JProperty>()
                          .FirstOrDefault(e => String.Compare(e.Name, name, StringComparison.OrdinalIgnoreCase) == 0)?
-                         .Value;
+                         .Value
+                };
             }
         }
 

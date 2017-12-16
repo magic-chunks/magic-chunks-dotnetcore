@@ -36,14 +36,16 @@ namespace MagicChunks.Documents
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
 
-            JObject current = (JObject)Document.Root;
-
-            if (current == null)
+            if (Document.Root == null)
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
-            current = FindPath(path.Take(path.Length - 1), current);
+            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
+            var pathEnding = path.Last();
 
-            UpdateTargetArrayElement(current, path.Last(), value);
+            foreach (var target in targets)
+            {
+                UpdateTargetArrayElement(target, pathEnding, value);
+            }
         }
 
         public void ReplaceKey(string[] path, string value)
@@ -54,14 +56,16 @@ namespace MagicChunks.Documents
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
 
-            JObject current = (JObject)Document.Root;
-
-            if (current == null)
+            if (Document.Root == null)
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
-            current = FindPath(path.Take(path.Length - 1), current);
+            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
+            var pathEnding = path.Last();
 
-            UpdateTargetElement(current, path.Last(), value);
+            foreach (var target in targets)
+            {
+                UpdateTargetElement(target, pathEnding, value);
+            }
         }
 
         public void RemoveKey(string[] path)
@@ -72,30 +76,40 @@ namespace MagicChunks.Documents
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
 
-            JObject current = (JObject)Document.Root;
-
-            if (current == null)
+            if (Document.Root == null)
                 throw new ArgumentException("Root element is not present.", nameof(path));
 
-            current = FindPath(path.Take(path.Length - 1), current);
+            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
             var pathEnding = path.Last();
+
             if (NodeIndexEndingRegex.IsMatch(pathEnding) || NodeValueEndingRegex.IsMatch(pathEnding))
             {
                 // Remove item from array
-                current.GetChildPropertyValue(pathEnding)?.Remove();
+                foreach (var target in targets)
+                {
+                    foreach (var item in target.GetChildPropertyValue(pathEnding))
+                    {
+                        item.Remove();
+                    }
+                }
             }
             else
             {
                 // Remove property
-                current.Remove(pathEnding);
+                foreach (var target in targets)
+                {
+                    target.Remove(pathEnding);
+                }
             }
         }
 
-        private static JObject FindPath(IEnumerable<string> path, JObject current)
+        private static IEnumerable<JObject> FindPath(IEnumerable<string> path, JObject current)
         {
             foreach (string pathElement in path)
             {
-                var element = current.GetChildPropertyValue(pathElement);
+                // For now we're iterating linear through the path
+                // Need to keep ability to return multiplie values
+                var element = current.GetChildPropertyValue(pathElement).FirstOrDefault();
                 if (element is JObject)
                 {
                     current = (JObject)element;
@@ -110,7 +124,7 @@ namespace MagicChunks.Documents
                     current = (JObject) current[pathElement];
                 }
             }
-            return current;
+            return new JObject[] { current };
         }
 
         private static void UpdateTargetArrayElement(JObject current, string targetElementName, string value)
