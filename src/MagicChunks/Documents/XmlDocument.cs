@@ -12,6 +12,7 @@ namespace MagicChunks.Documents
     public class XmlDocument : IDocument
     {
         private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>[\w\:]+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex ProcessingInstructionsPathElementRegex = new Regex(@"^\?.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         protected readonly XDocument Document;
 
@@ -44,9 +45,15 @@ namespace MagicChunks.Documents
             if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
-            current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
-
-            UpdateTargetArrayElement(value, path.Last(), current, documentNamespace);
+            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+            {
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                UpdateTargetArrayElement(value, path.Last(), current, documentNamespace);
+            }
+            else
+            {
+                throw new NotSupportedException("Arrays are not supported for XML processing instructions");
+            }
         }
 
         public void ReplaceKey(string[] path, string value)
@@ -66,9 +73,15 @@ namespace MagicChunks.Documents
             if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
-            current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
-
-            UpdateTargetElement(value, path.Last(), current, documentNamespace);
+            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+            {
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                UpdateTargetElement(value, path.Last(), current, documentNamespace);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void RemoveKey(string[] path)
@@ -88,9 +101,15 @@ namespace MagicChunks.Documents
             if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
-            current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
-
-            RemoveTargetElement(path.Last(), current, documentNamespace);
+            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+            {
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                RemoveTargetElement(path.Last(), current, documentNamespace);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private static XElement FindPath(IEnumerable<string> path, XElement current, string documentNamespace)
@@ -100,10 +119,9 @@ namespace MagicChunks.Documents
                 if (pathElement.StartsWith("@"))
                     throw new ArgumentException("Attribute element could be only at end of the path.", nameof(path));
 
-                var attributeFilterMatch = AttributeFilterRegex.Match(pathElement);
-
                 var currentElement = current?.GetChildElementByName(pathElement);
 
+                var attributeFilterMatch = AttributeFilterRegex.Match(pathElement);
                 if (attributeFilterMatch.Success)
                 {
                     current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);

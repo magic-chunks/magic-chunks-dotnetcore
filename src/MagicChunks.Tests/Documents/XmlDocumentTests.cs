@@ -691,7 +691,7 @@ namespace MagicChunks.Tests.Documents
     <add key=""Auth:Provider:Name"" value=""Name"" />
   </appSettings>
 </configuration>");
-            
+
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key = 'Auth:Environment']", "@value" }, "Production");
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Credential\"]", "@value" }, "XqoL6MXqOPeGTxXrJsQA7gK5cXLvnlSYJUtAwFWbRo7GDkbsSu");
             document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key=\"Auth:Type\"]", "@value" }, "Bearer");
@@ -710,6 +710,54 @@ namespace MagicChunks.Tests.Documents
     <add key=""Auth:Provider:Name"" value=""ABC"" />
   </appSettings>
 </configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformProcessingInstructions()
+        {
+            // Arrange
+            var document = new XmlDocument(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.2""?>
+  <?define ProductVersion=""1.3.0.0"" ?>
+</Wix>");
+
+            document.ReplaceKey(new[] { "Wix", "?define[@ProductName = 'My product for ArcGIS 10.2']", "@ProductName" }, "My product for ArcGIS 10.3");
+
+            var result = document.ToString();
+
+
+            // Assert
+            Assert.Equal(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.3""?>
+  <?define ProductVersion=""1.3.0.0"" ?>
+</Wix>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
+        public void TransformProcessingInstructions2()
+        {
+            // Arrange
+            var document = new XmlDocument(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.2""?>
+  <?define ProductVersion=""1.3.0.0"" ?>
+</Wix>");
+
+            document.ReplaceKey(new[] { "Wix", "Nested", "Nested2", "?define", "@ProductName" }, "My product for ArcGIS 10.3");
+            document.RemoveKey(new[] { "Wix", "?define[@ProductVersion = '1.3.0.0']" });
+
+            var result = document.ToString();
+
+
+            // Assert
+            Assert.Equal(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.2""?>
+  <?define ProductVersion=""1.3.0.0"" ?>
+  <Nested>
+    <Nested2>
+      <?define ProductName=""My product for ArcGIS 10.3""?>
+    </Nested2>
+  </Nested>
+</Wix>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
     }
