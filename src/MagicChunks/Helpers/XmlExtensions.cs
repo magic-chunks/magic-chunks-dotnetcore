@@ -43,7 +43,7 @@ namespace MagicChunks.Helpers
                 result = XName.Get(name, defaultNamespace);
             else
             {
-                var attributeNameParts = name.Split(':');                
+                var attributeNameParts = name.Split(':');
                 var attributeNamespace = element.GetNamespaceOfPrefix(attributeNameParts[0]);
                 if (attributeNamespace != null)
                     result = XName.Get(attributeNameParts[1], attributeNamespace.NamespaceName);
