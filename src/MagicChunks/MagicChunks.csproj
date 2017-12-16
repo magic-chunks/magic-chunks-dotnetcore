@@ -19,7 +19,7 @@
     <PackageReference Include="ilmerge" Version="2.14.1208" />
     <PackageReference Include="ILMerge.Tools" Version="2.14.1208" />
     <PackageReference Include="ILMerge.Tools.MSBuildToolTask" Version="2.14.1208.49" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="15.3.409" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.5.180" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
