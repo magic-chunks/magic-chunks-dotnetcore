@@ -412,6 +412,35 @@ namespace MagicChunks.Tests.Documents
         }
 
         [Fact]
+        public void TransformWithNamesapce5()
+        {
+            // Arrange
+
+            var document = new XmlDocument(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <appSettings>
+    <add key=""ida:issuer"" value=""10000"" />
+  </appSettings>
+</configuration>
+");
+
+            // Act
+
+            document.ReplaceKey(new[] { "configuration", "appSettings", "add[@key='ida:issuer']", "@value" }, "10001");
+
+            var result = document.ToString();
+
+            // Assert
+
+            Assert.Equal(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <appSettings>
+    <add key=""ida:issuer"" value=""10001"" />
+  </appSettings>
+</configuration>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
+
+        [Fact]
         public void AddElementToArray()
         {
             // Arrange
