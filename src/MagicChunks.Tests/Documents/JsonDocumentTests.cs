@@ -194,45 +194,43 @@ namespace MagicChunks.Tests.Documents
 
             // Act
 
-            //document.ReplaceKey(new[] { "bindings[]", "connection" }, "test");
-            NotSupportedException result = Assert.Throws<NotSupportedException>(() => document.ReplaceKey(new[] { "bindings[]", "connection" }, "test"));
+            document.ReplaceKey(new[] { "bindings[]", "connection" }, "test");
 
-            //var result = document.ToString();
+            var result = document.ToString();
 
 
             // Assert
-            Assert.NotNull(result);
 
-            //            Assert.Equal(@"{
-            //  ""bindings"": [
-            //    {
-            //      ""type"": ""httpTrigger"",
-            //      ""direction"": ""in"",
-            //      ""webHookType"": ""genericJson"",
-            //      ""name"": ""req""
-            //    },
-            //    {
-            //      ""type"": ""http"",
-            //      ""direction"": ""out"",
-            //      ""name"": ""res""
-            //    },
-            //    {
-            //      ""type"": ""blob"",
-            //      ""name"": ""name2"",
-            //      ""path"": ""path2"",
-            //      ""connection"": ""test"",
-            //      ""direction"": ""in""
-            //    },
-            //    {
-            //      ""type"": ""blob"",
-            //      ""name"": ""name2"",
-            //      ""path"": ""path2"",
-            //      ""connection"": ""test"",
-            //      ""direction"": ""in""
-            //    }
-            //  ],
-            //  ""disabled"": false
-            //}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+            Assert.Equal(@"{
+""bindings"": [
+{
+    ""type"": ""httpTrigger"",
+    ""direction"": ""in"",
+    ""webHookType"": ""genericJson"",
+    ""name"": ""req""
+},
+{
+    ""type"": ""http"",
+    ""direction"": ""out"",
+    ""name"": ""res""
+},
+{
+    ""type"": ""blob"",
+    ""name"": ""name2"",
+    ""path"": ""path2"",
+    ""connection"": ""test"",
+    ""direction"": ""in""
+},
+{
+    ""type"": ""blob"",
+    ""name"": ""name2"",
+    ""path"": ""path2"",
+    ""connection"": ""test"",
+    ""direction"": ""in""
+}
+],
+""disabled"": false
+}", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
         [Fact]
