@@ -13,6 +13,8 @@ namespace MagicChunks.Documents
     {
         private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>[\w\:]+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly Regex ProcessingInstructionsPathElementRegex = new Regex(@"^\?.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex AttributePathElementRegex = new Regex(@"^\@.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex AttributeNodeRegex = new Regex(@"(?<attrName>\w+)\s*\=\s*\""(?<attrValue>.+?)\""", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         protected readonly XDocument Document;
 
@@ -47,7 +49,7 @@ namespace MagicChunks.Documents
 
             if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
             {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
                 UpdateTargetArrayElement(value, path.Last(), current, documentNamespace);
             }
             else
@@ -75,12 +77,28 @@ namespace MagicChunks.Documents
 
             if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
             {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
                 UpdateTargetElement(value, path.Last(), current, documentNamespace);
             }
             else
             {
-                throw new NotImplementedException();
+                if (path.Take(path.Length - 2).Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+                {
+                    throw new ArgumentException("Processing instruction could not contain nested elements.", nameof(path));
+                }
+
+                if (!ProcessingInstructionsPathElementRegex.IsMatch(path.Skip(path.Length - 2).First()))
+                {
+                    throw new ArgumentException("To update processing instruction you should point attribute name.", nameof(path));
+                }
+
+                if (!AttributePathElementRegex.IsMatch(path.Last()))
+                {
+                    throw new ArgumentException("To update processing instruction you should point attribute name.", nameof(path));
+                }
+
+                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XProcessingInstruction;
+                UpdateProcessingInstruction(value, path.Last().TrimStart('@'), processingInstruction, documentNamespace);
             }
         }
 
@@ -103,41 +121,61 @@ namespace MagicChunks.Documents
 
             if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
             {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace);
+                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
                 RemoveTargetElement(path.Last(), current, documentNamespace);
             }
             else
             {
-                throw new NotImplementedException();
+                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XProcessingInstruction;
+
+                // Remove whole processing instruction (not just single attribute)
+                if (processingInstruction == null)
+                    processingInstruction = FindPath(path.Skip(1).Take(path.Length - 1), current, documentNamespace) as XProcessingInstruction;
+
+                RemoveProcessingInstruction(path.Last(), processingInstruction, documentNamespace);
             }
         }
 
-        private static XElement FindPath(IEnumerable<string> path, XElement current, string documentNamespace)
+        private static XNode FindPath(IEnumerable<string> path, XElement current, string documentNamespace)
         {
+            XNode result = current;
+
             foreach (string pathElement in path)
             {
                 if (pathElement.StartsWith("@"))
                     throw new ArgumentException("Attribute element could be only at end of the path.", nameof(path));
 
-                var currentElement = current?.GetChildElementByName(pathElement);
+                var currentElement = !ProcessingInstructionsPathElementRegex.IsMatch(pathElement) ? (result as XElement)?.GetChildElementByName(pathElement) as XNode : (result as XElement)?.GetChildProcessingInstructionByName(pathElement.TrimStart('?'));
 
                 var attributeFilterMatch = AttributeFilterRegex.Match(pathElement);
                 if (attributeFilterMatch.Success)
                 {
-                    current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
+                    if (!ProcessingInstructionsPathElementRegex.IsMatch(pathElement))
+                    {
+                        result = (result as XElement).FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
+                    }
+                    else
+                    {
+                        result = (result as XElement).FindProcessingInstructionByAttrFilterMatch(attributeFilterMatch, documentNamespace);
+                    }
                 }
                 else if (currentElement != null)
                 {
-                    current = currentElement;
+                    result = currentElement;
                 }
                 else
                 {
-                    if (!current.HasElements)
-                        current.SetValue("");
-                    current = current.CreateChildElement(documentNamespace, pathElement);
+                    if (!(result as XElement).HasElements)
+                        (result as XElement).SetValue("");
+
+                    if (!ProcessingInstructionsPathElementRegex.IsMatch(pathElement))
+                        result = (result as XElement).CreateChildElement(documentNamespace, pathElement);
+                    else
+                        result = (result as XElement).CreateChildProcessingInstruction(documentNamespace, pathElement.TrimStart('?'));
                 }
             }
-            return current;
+
+            return result;
         }
 
         private static void UpdateTargetElement(string value, string targetElement, XElement current, string documentNamespace)
@@ -158,16 +196,39 @@ namespace MagicChunks.Documents
                 }
                 else
                 {
-                    if(!current.HasElements)
+                    if (!current.HasElements)
                         current.SetValue("");
 
-                    current.Add(new XElement(targetElement.GetNameWithNamespace(current, documentNamespace)) {Value = value});
+                    current.Add(new XElement(targetElement.GetNameWithNamespace(current, documentNamespace)) { Value = value });
                 }
             }
             else
             {   // Filtered element update
                 current = current.FindChildByAttrFilterMatch(attributeFilterMatch, documentNamespace);
                 current.Value = value;
+            }
+        }
+
+        private static void UpdateProcessingInstruction(string value, string targetElement, XProcessingInstruction current, string documentNamespace)
+        {
+            var valuesToReplace = AttributeNodeRegex.Matches(current.Data).OfType<Match>().Where(a =>
+            {
+                var eAttrName = a.Groups["attrName"]?.Value;
+                var eAttrValue = a.Groups["attrValue"]?.Value;
+
+                return String.Compare(eAttrName, targetElement, StringComparison.OrdinalIgnoreCase) == 0;
+            }).Select(m => m.Value).ToArray();
+
+            if (valuesToReplace.Any())
+            {
+                foreach (var replaceValue in valuesToReplace)
+                {
+                    current.Data = current.Data.Replace(replaceValue, $"{targetElement}=\"{value}\"");
+                }
+            }
+            else
+            {
+                current.Data += (!string.IsNullOrEmpty(current.Data) ? " " : string.Empty) + $"{targetElement}=\"{value}\"";
             }
         }
 
@@ -222,6 +283,34 @@ namespace MagicChunks.Documents
             }
         }
 
+        private static void RemoveProcessingInstruction(string targetElement, XProcessingInstruction current, string documentNamespace)
+        {
+            if (ProcessingInstructionsPathElementRegex.IsMatch(targetElement))
+            {
+                // remove  whole processing restriction
+                current.Remove();
+            }
+            else if (AttributePathElementRegex.IsMatch(targetElement))
+            {
+                // remove attribute from processing instruction
+                var valuesToRemove = AttributeNodeRegex.Matches(current.Data).OfType<Match>().Where(a =>
+                {
+                    var eAttrName = a.Groups["attrName"]?.Value;
+
+                    return String.Compare(eAttrName, targetElement.TrimStart('@'), StringComparison.OrdinalIgnoreCase) == 0;
+                }).Select(m => m.Value).ToArray();
+
+                if (valuesToRemove.Any())
+                {
+                    foreach (var value in valuesToRemove)
+                    {
+                        current.Data = current.Data.Replace(value, string.Empty);
+                    }
+                }
+            }
+        }
+
+        
         public override string ToString()
         {
             return Document?.ToStringWithDeclaration() ?? String.Empty;

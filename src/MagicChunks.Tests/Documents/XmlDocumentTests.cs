@@ -719,17 +719,21 @@ namespace MagicChunks.Tests.Documents
             var document = new XmlDocument(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
   <?define ProductName=""My product for ArcGIS 10.2""?>
   <?define ProductVersion=""1.3.0.0"" ?>
+  <?test value=""1"" ?>
 </Wix>");
 
             document.ReplaceKey(new[] { "Wix", "?define[@ProductName = 'My product for ArcGIS 10.2']", "@ProductName" }, "My product for ArcGIS 10.3");
+            document.ReplaceKey(new[] { "Wix", "?define[@ProductName = 'My product for ArcGIS 10.3']", "@ProductURL" }, "http://");
+            document.ReplaceKey(new[] { "Wix", "?test", "@value" }, "2");
 
             var result = document.ToString();
 
 
             // Assert
             Assert.Equal(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
-  <?define ProductName=""My product for ArcGIS 10.3""?>
+  <?define ProductName=""My product for ArcGIS 10.3"" ProductURL=""http://""?>
   <?define ProductVersion=""1.3.0.0"" ?>
+  <?test value=""2"" ?>
 </Wix>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
@@ -738,11 +742,12 @@ namespace MagicChunks.Tests.Documents
         {
             // Arrange
             var document = new XmlDocument(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
-  <?define ProductName=""My product for ArcGIS 10.2""?>
+  <?define ProductName=""My product for ArcGIS 10.2"" x=""2""?>
   <?define ProductVersion=""1.3.0.0"" ?>
 </Wix>");
 
             document.ReplaceKey(new[] { "Wix", "Nested", "Nested2", "?define", "@ProductName" }, "My product for ArcGIS 10.3");
+            document.RemoveKey(new[] { "Wix", "?define[@ProductName = 'My product for ArcGIS 10.2']", "@x" });
             document.RemoveKey(new[] { "Wix", "?define[@ProductVersion = '1.3.0.0']" });
 
             var result = document.ToString();
@@ -750,15 +755,39 @@ namespace MagicChunks.Tests.Documents
 
             // Assert
             Assert.Equal(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
-  <?define ProductName=""My product for ArcGIS 10.2""?>
-  <?define ProductVersion=""1.3.0.0"" ?>
   <Nested>
     <Nested2>
       <?define ProductName=""My product for ArcGIS 10.3""?>
     </Nested2>
   </Nested>
+  <?define ProductName=""My product for ArcGIS 10.2""?>
 </Wix>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
         }
 
+        [Fact]
+        public void TransformProcessingInstructions3()
+        {
+            // Arrange
+            var document = new XmlDocument(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.2"" test=""1""?>
+  <?define ProductVersion=""1.3.0.0"" ?>
+  <?define ProductUrl=""1.3.0.0"" ?>
+  <?define ProductLicence=""1.3.0.0"" ?>
+</Wix>");
+
+            document.ReplaceKey(new[] { "Wix", "?define[1]", "@test" }, "2");
+            document.RemoveKey(new[] { "Wix", "?define[0]", "@test" });
+            document.RemoveKey(new[] { "Wix", "?define[3]"});
+
+            var result = document.ToString();
+
+
+            // Assert
+            Assert.Equal(@"<Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"">
+  <?define ProductName=""My product for ArcGIS 10.2"" ?>
+  <?define ProductVersion=""1.3.0.0""  test=""2""?>
+  <?define ProductUrl=""1.3.0.0"" ?>
+</Wix>", result, ignoreCase: true, ignoreLineEndingDifferences: true, ignoreWhiteSpaceDifferences: true);
+        }
     }
 }

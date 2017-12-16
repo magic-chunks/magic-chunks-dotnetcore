@@ -10,6 +10,8 @@ namespace MagicChunks.Helpers
     public static class XmlExtensions
     {
         private static readonly Regex NodeIndexEndingRegex = new Regex(@"\[\d+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex ProcessingInstructionsPathElementRegex = new Regex(@"^\?.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        private static readonly Regex AttributeNodeRegex = new Regex(@"(?<attrName>\w+)\s*\=\s*\""(?<attrValue>.+?)\""", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public static string ToStringWithDeclaration(this XDocument document)
         {
@@ -100,6 +102,46 @@ namespace MagicChunks.Helpers
             }
         }
 
+        public static XProcessingInstruction GetChildProcessingInstructionByName(this XElement source, string name)
+        {
+            if (!NodeIndexEndingRegex.IsMatch(name))
+            {
+                return source?.Nodes().OfType<XProcessingInstruction>()
+                    .FirstOrDefault(e => String.Compare(e.Target, name, StringComparison.OrdinalIgnoreCase) == 0);
+            }
+            else
+            {
+                string nodeName;
+                int nodeIndex;
+
+                try
+                {
+                    nodeName = NodeIndexEndingRegex.Replace(name, String.Empty);
+                    nodeIndex = int.Parse(NodeIndexEndingRegex.Match(name).Value.Trim('[', ']'));
+
+                    if (nodeIndex < 0)
+                        throw new ArgumentException("Index should be greater than 0.");
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException($"Wrong element name: {name}", ex);
+                }
+                catch (FormatException ex)
+                {
+                    throw new ArgumentException($"Wrong element name: {name}", ex);
+                }
+                catch (OverflowException ex)
+                {
+                    throw new ArgumentException($"Wrong element name: {name}", ex);
+                }
+
+                var elements = source?.Nodes().OfType<XProcessingInstruction>()
+                    .Where(e => String.Compare(e.Target, nodeName, StringComparison.OrdinalIgnoreCase) == 0);
+
+                return elements.Skip(nodeIndex).FirstOrDefault();
+            }
+        }
+
         public static XElement GetChildElementByAttrValue(this XElement source, string name, string attr, string attrValue)
         {
             var elements = source.Elements()
@@ -107,7 +149,20 @@ namespace MagicChunks.Helpers
 
             return elements
                 .FirstOrDefault(e => e.Attributes().Any(a => (a.Name == attr.GetNameWithNamespace(source, String.Empty)) && (a.Value == attrValue)));
+        }
 
+        public static XProcessingInstruction GetChildProcessingInstructionByAttrValue(this XElement source, string name, string attr, string attrValue)
+        {
+            var nodes = source.Nodes().OfType<XProcessingInstruction>()
+                .Where(e => String.Compare(e.Target, name, StringComparison.OrdinalIgnoreCase) == 0);
+
+            return nodes.FirstOrDefault(e => AttributeNodeRegex.Matches(e.Data).OfType<Match>().Any(a =>
+            {
+                var eAttrName = a.Groups["attrName"]?.Value;
+                var eAttrValue = a.Groups["attrValue"]?.Value;
+
+                return (String.Compare(eAttrName, attr, StringComparison.OrdinalIgnoreCase) == 0) && (eAttrValue == attrValue);
+            }));
         }
 
         public static XElement CreateChildElement(this XElement source, string documentNamespace, string elementName,
@@ -124,6 +179,14 @@ namespace MagicChunks.Helpers
             return item;
         }
 
+        public static XProcessingInstruction CreateChildProcessingInstruction(this XElement source, string documentNamespace, string elementName,
+            string attrName = null, string attrValue = null)
+        {
+            var item = new XProcessingInstruction(elementName, (!string.IsNullOrWhiteSpace(attrName) && !string.IsNullOrWhiteSpace(attrValue)) ? $"{attrName}=\"{attrValue}\"" : string.Empty);
+            source.Add(item);
+            return item;
+        }
+
         public static XElement FindChildByAttrFilterMatch(this XElement source, Match attributeFilterMatch,
             string documentNamespace)
         {
@@ -133,6 +196,17 @@ namespace MagicChunks.Helpers
 
             var item = source?.GetChildElementByAttrValue(elementName, attrName, attrValue);
             return item ?? source.CreateChildElement(documentNamespace, elementName, attrName, attrValue);
+        }
+
+        public static XProcessingInstruction FindProcessingInstructionByAttrFilterMatch(this XElement source, Match attributeFilterMatch,
+            string documentNamespace)
+        {
+            var elementName = attributeFilterMatch.Groups["element"].Value?.TrimStart('?');
+            var attrName = attributeFilterMatch.Groups["key"].Value;
+            var attrValue = attributeFilterMatch.Groups["value"].Value;
+
+            var item = source?.GetChildProcessingInstructionByAttrValue(elementName, attrName, attrValue);
+            return item ?? source.CreateChildProcessingInstruction(documentNamespace, elementName, attrName, attrValue);
         }
     }
 }
