@@ -89,9 +89,10 @@ Task("UpdateVersion")
         var nuspecFiles = GetFiles(paths.workingDirSources + "/**/*.nuspec");
         foreach (var path in nuspecFiles)
         {
+            Information("Nuspec: " + path);
             XmlPoke(path, "/nuspec:package/nuspec:metadata/nuspec:version", version, new XmlPokeSettings {
                 Namespaces = new Dictionary<string, string> {
-                    { "nuspec", "http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd" }
+                    { "nuspec", "http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd" }
                 }
             });
         }
