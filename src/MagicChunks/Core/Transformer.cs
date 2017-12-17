@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using MagicChunks.Helpers;
 
 namespace MagicChunks.Core
 {
@@ -19,18 +20,13 @@ namespace MagicChunks.Core
             _documentTypes = typeof(Transformer)
                 .GetTypeInfo()
                 .Assembly
-                .DefinedTypes
-                .Where(p => !p.IsAbstract && p.ImplementedInterfaces.Contains(typeof(IDocument)))
-                .Select(p => p.AsType())
-                .ToArray();
-
+                .GetAllTypes(p => !p.IsAbstract && p.ImplementedInterfaces.Contains(typeof(IDocument)));
         }
 
         public IEnumerable<Type> DocumentTypes => _documentTypes;
 
         public string Transform(string source, TransformationCollection transformations)
         {
-
             foreach (var documentType in DocumentTypes)
             {
                 IDocument document;
