@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MagicChunks.Core;
 using Microsoft.Build.Framework;
 
