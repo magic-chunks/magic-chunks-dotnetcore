@@ -45,7 +45,6 @@ Task("PrepareOutputFolders")
         EnsureDirectoryExists(paths.workingDirVSTS);
 
         CopyDirectory(resolveDirectoryPath(paths.root + "/src"), resolveDirectoryPath(paths.workingDirSources + "/src"));
-        CopyDirectory(resolveDirectoryPath(paths.root + "/tools"), resolveDirectoryPath(paths.workingDirSources + "/tools"));
         CopyDirectory(resolveDirectoryPath(paths.root + "/nuspecs"), resolveDirectoryPath(paths.workingDirSources + "/nuspecs"));
     });
 
