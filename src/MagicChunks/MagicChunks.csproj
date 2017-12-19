@@ -23,6 +23,6 @@
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
   </ItemGroup>
 
-  <Import Project="$(SolutionDir)\..\tools\ILRepack\ILRepack.CSharp.targets" />
+  <!-- <Import Project="$(SolutionDir)\..\tools\ILRepack\ILRepack.CSharp.targets" /> -->
 
 </Project>
