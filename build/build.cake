@@ -1,5 +1,6 @@
 #addin "Cake.Powershell"
 #addin "Newtonsoft.Json"
+#tool "nuget:?package=ILRepack"
 
 // Helpers
 
@@ -145,8 +146,14 @@ Task("Build")
             PlatformTarget = PlatformTarget.MSIL,
         }.WithTarget("Build"));
 
+        ILRepack(
+            paths.workingDirSolutionDir + "/MagicChunks/bin/" + configuration + "/netstandard1.3/MagicChunks.dll",
+            paths.workingDirSolutionDir + "/MagicChunks/bin/" + configuration + "/netstandard1.3/MagicChunks.dll",
+            GetFiles(paths.workingDirSolutionDir + "/MagicChunks/bin/" + configuration + "/netstandard1.3/*.dll"),
+            new ILRepackSettings { Internalize = true });
+
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks" + "/bin/" + configuration + "/netstandard1.3/MagicChunks*.dll", paths.workingDirDotNet);
-        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/netstandard1.6/MagicChunks*.dll", paths.workingDirDotNet);
+        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/netstandard1.6/MagicChunks.Cake.dll", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/MSBuild/*.targets", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/Powershell/*.ps*", paths.workingDirDotNet);
     });
