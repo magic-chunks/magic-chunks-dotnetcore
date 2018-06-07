@@ -22,8 +22,11 @@
         <file src="netstandard1.3\MagicChunks\MagicChunks.targets" target="lib\netstandard1.3" />
         <file src="netstandard1.3\MagicChunks\MagicChunks.psm1" target="lib\netstandard1.3" />
         <file src="netstandard1.6\MagicChunks\MagicChunks.dll" target="lib\netstandard1.6" />
-        <file src="netstandard1.6\MagicChunks\MagicChunks.Cake.dll" target="lib\netstandard1.6" />
         <file src="netstandard1.6\MagicChunks\MagicChunks.targets" target="lib\netstandard1.6" />
         <file src="netstandard1.6\MagicChunks\MagicChunks.psm1" target="lib\netstandard1.6" />
+        <file src="netstandard2.0\MagicChunks\MagicChunks.dll" target="lib\netstandard2.0" />
+        <file src="netstandard2.0\MagicChunks\MagicChunks.Cake.dll" target="lib\netstandard2.0" />
+        <file src="netstandard2.0\MagicChunks\MagicChunks.targets" target="lib\netstandard2.0" />
+        <file src="netstandard2.0\MagicChunks\MagicChunks.psm1" target="lib\netstandard2.0" />
     </files>
 </package>
