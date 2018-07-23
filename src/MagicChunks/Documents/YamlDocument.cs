@@ -25,6 +25,10 @@ namespace MagicChunks.Documents
                 try
                 {
                     Document = (Dictionary<object, object>)deserializer.Deserialize(reader);
+
+                    if (Document == null)
+                        throw new ArgumentException("Root element is not present.", nameof(source));
+
                 }
                 catch (YamlException ex)
                 {
@@ -39,9 +43,6 @@ namespace MagicChunks.Documents
 
             Dictionary<object, object> current = Document;
 
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
             current = FindPath(path.Take(path.Length - 1), current);
 
             UpdateTargetArrayElement(current, path.Last(), value);
@@ -53,8 +54,6 @@ namespace MagicChunks.Documents
 
             Dictionary<object, object> current = Document;
 
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
 
             current = FindPath(path.Take(path.Length - 1), current);
 
@@ -66,9 +65,6 @@ namespace MagicChunks.Documents
             ValidatePath(path);
 
             Dictionary<object, object> current = Document;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
 
             current = FindPath(path.Take(path.Length - 1), current);
             current.Remove(path.Last());
