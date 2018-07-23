@@ -39,35 +39,24 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            ValidatePath(path);
-
-            Dictionary<object, object> current = Document;
-
-            current = FindPath(path.Take(path.Length - 1), current);
-
-            UpdateTargetArrayElement(current, path.Last(), value);
+            UpdateTargetArrayElement(Process(path), path.Last(), value);
         }
 
         public void ReplaceKey(string[] path, string value)
         {
-            ValidatePath(path);
-
-            Dictionary<object, object> current = Document;
-
-
-            current = FindPath(path.Take(path.Length - 1), current);
-
-            UpdateTargetElement(current, path.Last(), value);
+            UpdateTargetElement(Process(path), path.Last(), value);
         }
 
         public void RemoveKey(string[] path)
         {
+            Process(path).Remove(path.Last());
+        }
+
+        private Dictionary<object, object> Process(string[] path)
+        {
             ValidatePath(path);
-
-            Dictionary<object, object> current = Document;
-
-            current = FindPath(path.Take(path.Length - 1), current);
-            current.Remove(path.Last());
+            var current = FindPath(path.Take(path.Length - 1), Document);
+            return current;
         }
 
         private static Dictionary<object, object> FindPath(IEnumerable<string> path, Dictionary<object, object> current)
