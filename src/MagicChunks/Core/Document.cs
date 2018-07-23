@@ -9,7 +9,7 @@ namespace MagicChunks.Core
     {
         protected virtual void ValidatePath(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
+            if (path == null || !path.Any())
                 throw new ArgumentException("Path is not speicified.", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
