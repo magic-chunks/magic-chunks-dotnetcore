@@ -9,7 +9,7 @@ using MagicChunks.Helpers;
 
 namespace MagicChunks.Documents
 {
-    public class XmlDocument : IDocument
+    public class XmlDocument : Document, IDocument
     {
         private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>[\w\:]+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly Regex ProcessingInstructionsPathElementRegex = new Regex(@"^\?.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -32,11 +32,7 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             XElement current = Document.Root;
             string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
@@ -60,11 +56,7 @@ namespace MagicChunks.Documents
 
         public void ReplaceKey(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             XElement current = Document.Root;
             string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
@@ -104,11 +96,7 @@ namespace MagicChunks.Documents
 
         public void RemoveKey(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not specified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             XElement current = Document.Root;
             string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;

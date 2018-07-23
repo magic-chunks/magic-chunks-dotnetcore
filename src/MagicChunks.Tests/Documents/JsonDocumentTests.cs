@@ -498,7 +498,7 @@ namespace MagicChunks.Tests.Documents
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "", "b" }, ""));
 
             // Arrange
-            Assert.True(result.Message?.StartsWith("There is empty items in the path."));
+            Assert.True(result.Message?.StartsWith("There is at least one empty segment in the path."));
         }
 
         [Fact]
@@ -511,7 +511,7 @@ namespace MagicChunks.Tests.Documents
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "   ", "b" }, ""));
 
             // Arrange
-            Assert.True(result.Message?.StartsWith("There is empty items in the path."));
+            Assert.True(result.Message?.StartsWith("There is at least one empty segment in the path."));
         }
     }
 }

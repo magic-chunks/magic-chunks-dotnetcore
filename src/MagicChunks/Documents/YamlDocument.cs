@@ -9,7 +9,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace MagicChunks.Documents
 {
-    public class YamlDocument : IDocument
+    public class YamlDocument : Document, IDocument
     {
         protected readonly Dictionary<object, object> Document;
 
@@ -35,11 +35,7 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             Dictionary<object, object> current = Document;
 
@@ -53,11 +49,7 @@ namespace MagicChunks.Documents
 
         public void ReplaceKey(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             Dictionary<object, object> current = Document;
 
@@ -71,11 +63,7 @@ namespace MagicChunks.Documents
 
         public void RemoveKey(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            ValidatePath(path);
 
             Dictionary<object, object> current = Document;
 
