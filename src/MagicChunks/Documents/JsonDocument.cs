@@ -21,6 +21,9 @@ namespace MagicChunks.Documents
             try
             {
                 Document = (JObject)JsonConvert.DeserializeObject(source);
+
+                if (Document.Root == null)
+                    throw new ArgumentException("Root element is not present.", nameof(source));
             }
             catch (JsonReaderException ex)
             {
@@ -30,10 +33,7 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            ValidatePath(path);
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             foreach (var target in targets)
             {
@@ -43,10 +43,7 @@ namespace MagicChunks.Documents
 
         public void ReplaceKey(string[] path, string value)
         {
-            ValidatePath(path);
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             foreach (var target in targets)
             {
@@ -56,10 +53,7 @@ namespace MagicChunks.Documents
 
         public void RemoveKey(string[] path)
         {
-            ValidatePath(path);
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             if (NodeIndexEndingRegex.IsMatch(pathEnding) || NodeValueEndingRegex.IsMatch(pathEnding))
             {
@@ -80,6 +74,16 @@ namespace MagicChunks.Documents
                     target.Remove(pathEnding);
                 }
             }
+        }
+
+        private (IEnumerable<JObject>, string) Process(string[] path)
+        {
+            ValidatePath(path);
+
+            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
+            var pathEnding = path.Last();
+
+            return (targets, pathEnding);
         }
 
         private static IEnumerable<JObject> FindPath(IEnumerable<string> path, JObject current)
@@ -165,12 +169,5 @@ namespace MagicChunks.Documents
         {
         }
 
-        protected override void ValidatePath(string[] path)
-        {
-            base.ValidatePath(path);
-
-            if (Document.Root == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-        }
     }
 }

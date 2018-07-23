@@ -7,7 +7,7 @@ namespace MagicChunks.Core
 {
     public class Document
     {
-        protected virtual void ValidatePath(string[] path)
+        protected static void ValidatePath(string[] path)
         {
             if (path == null || !path.Any())
                 throw new ArgumentException("Path is not speicified.", nameof(path));
