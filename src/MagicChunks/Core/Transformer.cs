@@ -79,7 +79,7 @@ namespace MagicChunks.Core
                 foreach (var key in transformations.KeysToRemove)
                 {
                     if (String.IsNullOrWhiteSpace(key))
-                        throw new ArgumentNullException("Transformation key is empty.", nameof(transformations));
+                        throw new ArgumentNullException(nameof(transformations), "Transformation key is empty.");
 
                     source.RemoveKey(SplitKey(key));
                 }
