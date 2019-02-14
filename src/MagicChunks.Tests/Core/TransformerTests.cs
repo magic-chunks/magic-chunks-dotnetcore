@@ -134,6 +134,7 @@ namespace MagicChunks.Tests.Core
                 { "#items[0]", "" },
                 { "#items[@i='1']/x", "" },
                 { "items[@i='3']", "{ y: '20' }" },
+                { "items[@i='a/b']/data", "2" },
                 { "items[0]", "{ x: '40' }" },
             };
 
@@ -147,6 +148,7 @@ namespace MagicChunks.Tests.Core
         { 'i': 1, data: 'BB', x: '25' },
         { 'i': 2, data: 'CC' },
         { 'i': 3, data: 'DD' },
+        { 'i': 'a/b', data: 'EE' }
     ],
     'b': '2',
     'c': '3'
@@ -166,6 +168,10 @@ namespace MagicChunks.Tests.Core
     },
     {
       ""y"": ""20""
+    },
+    {
+      ""i"": ""a/b"",
+      ""data"": ""2""
     }
   ],
   ""b"": ""2"",
@@ -192,6 +198,7 @@ namespace MagicChunks.Tests.Core
                 { "xml/e/item[@key=\"item3\"]", "6" },
                 { "xml/f/item[@key = 'item2']/val", "7" },
                 { "xml/f/item[@key=\"item3\"]/val", "8" },
+                { "xml/f/item[@key='item3/subsetting']/val", "9" },
                 { "xml/d", "4" },
                 { "#xml/g", "" },
                 { "xml/items[]`1", "<val>1</val>" },
@@ -224,6 +231,9 @@ namespace MagicChunks.Tests.Core
   </item>
   <item key=""item3"">
     <val>3</val>
+  </item>
+  <item key=""item3/subsetting"">
+    <val></val>
   </item>
 </f>
 <g>
@@ -267,6 +277,9 @@ namespace MagicChunks.Tests.Core
     <item key=""item3"">
       <val>8</val>
     </item>
+  <item key=""item3/subsetting"">
+    <val>9</val>
+  </item>
   </f>
   <items>
     <val>1</val>
