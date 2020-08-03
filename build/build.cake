@@ -29,6 +29,8 @@ var paths = new {
 
     solutionDir = resolveDirectoryPath("./../src/"),
     solutionPath = resolveDirectoryPath("./../src/MagicChunks.sln"),
+
+    vstsTaskSdk = resolveDirectoryPath("./node_modules/vsts-task-sdk"),
 };
 
 // Tasks
@@ -140,7 +142,7 @@ Task("Build")
     .Does(() => {
         MSBuild(paths.workingDirSolutionPath, new MSBuildSettings {
             Verbosity = Verbosity.Minimal,
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.VS2019,
             Configuration = configuration,
             PlatformTarget = PlatformTarget.MSIL,
         }.WithTarget("Build"));
@@ -197,6 +199,7 @@ Task("PackVSTS")
     .Does(() => {
 
         CopyDirectory(paths.workingDirSolutionDir + "/MagicChunks/VSTS", paths.workingDirVSTS);
+        CopyDirectory(paths.vstsTaskSdk, paths.workingDirVSTS + "/MagicChunks/ps_modules");
         CopyFiles(paths.workingDirDotNet + "/**/*.dll", paths.workingDirVSTS + "/MagicChunks");
 
         StartPowershellFile(paths.workingDirVSTS + "/_build.ps1", new PowershellSettings {

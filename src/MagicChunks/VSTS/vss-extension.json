@@ -1,92 +1,92 @@
 {
-    "manifestVersion": 1,
-    "id": "magic-chunks",
-    "version": "1.0.0",
-    "name": "Magic Chunks",
-    "description": "Easy to use tool to config transformations for JSON, XML and YAML.",
-    "publisher": "sergeyzwezdin",
-    "public": true,
-    "icons": {
-        "default": "images/icon.png",
-        "large": "images/icon-large.png"
-    },
-    "scopes": [
-        "vso.build"
-    ],
-    "tags": [
-        "Configuration",
-        "Transform",
-        "JSON",
-        "XML",
-        "YAML",
-        "YML",
-        "web.config",
-        "app.config",
-        "appsetings.json"
-    ],
-    "categories": [
-        "Build and release"
-    ],
-    "targets": [
-        {
-            "id": "Microsoft.VisualStudio.Services"
-        }
-    ],
-    "files": [
-        {
-            "path": "MagicChunks"
-        },
-        {
-            "path": "images",
-            "addressable": true
-        },
-        {
-            "path": "videos",
-            "addressable": true
-        }
-    ],
-    "contributions": [
-        {
-            "id": "magic.chunks",
-            "type": "ms.vss-distributed-task.task",
-            "description": "Config transform with Magic Chunks",
-            "targets": [
-                "ms.vss-distributed-task.tasks"
-            ],
-            "properties": {
-                "name": "MagicChunks"
-            }
-        }
-    ],
-    "content": {
-        "details": {
-            "path": "overview.md"
-        }
-    },
-    "screenshots": [
-        {
-            "path": "images/screenshot1.png"
-        },
-        {
-            "path": "images/screenshot2.png"
-        }
-    ],
-    "links": {
-        "getstarted": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension"
-        },
-        "learn": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki"
-        },
-        "support": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/issues"
-        },
-        "license": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/blob/master/LICENSE"
-        }
-    },
-    "branding": {
-        "color": "#00552e",
-        "theme": "dark"
+  "manifestVersion": 1,
+  "id": "magic-chunks",
+  "version": "1.0.0",
+  "name": "Magic Chunks",
+  "description": "Easy to use tool to config transformations for JSON, XML and YAML.",
+  "publisher": "PDMSLtd",
+  "public": false,
+  "icons": {
+    "default": "images/icon.png",
+    "large": "images/icon-large.png"
+  },
+  "scopes": [
+    "vso.build"
+  ],
+  "tags": [
+    "Configuration",
+    "Transform",
+    "JSON",
+    "XML",
+    "YAML",
+    "YML",
+    "web.config",
+    "app.config",
+    "appsetings.json"
+  ],
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
     }
+  ],
+  "files": [
+    {
+      "path": "MagicChunks"
+    },
+    {
+      "path": "images",
+      "addressable": true
+    },
+    {
+      "path": "videos",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "magic.chunks",
+      "type": "ms.vss-distributed-task.task",
+      "description": "Config transform with Magic Chunks",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "MagicChunks"
+      }
+    }
+  ],
+  "content": {
+    "details": {
+      "path": "overview.md"
+    }
+  },
+  "screenshots": [
+    {
+      "path": "images/screenshot1.png"
+    },
+    {
+      "path": "images/screenshot2.png"
+    }
+  ],
+  "links": {
+    "getstarted": {
+      "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension"
+    },
+    "learn": {
+      "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki"
+    },
+    "support": {
+      "uri": "https://github.com/sergeyzwezdin/magic-chunks/issues"
+    },
+    "license": {
+      "uri": "https://github.com/sergeyzwezdin/magic-chunks/blob/master/LICENSE"
+    }
+  },
+  "branding": {
+    "color": "#00552e",
+    "theme": "dark"
+  }
 }

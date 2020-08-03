@@ -1,0 +1,8 @@
+{
+  "name": "MagicChunks",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "vsts-task-sdk": "^0.6.4"
+  }
+}

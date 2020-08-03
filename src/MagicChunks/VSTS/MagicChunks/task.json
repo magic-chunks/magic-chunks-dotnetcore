@@ -1,5 +1,5 @@
-﻿{
-  "id": "985284E0-A7D2-4E4D-802C-0A516BFFAADF",
+{
+  "id": "F6F3DDA2-9E01-43F9-BF76-5DE9A83B8D59",
   "name": "MagicChunks",
   "friendlyName": "Config transformation",
   "description": "Transform config file with Magic Chunks",
@@ -9,7 +9,7 @@
     "Build",
     "Release"
   ],
-  "author": "Sergey Zwezdin",
+  "author": "PDMS business solutions",
   "version": {
     "Major": 1,
     "Minor": 0,
@@ -134,7 +134,7 @@
   ],
   "instanceNameFormat": "Config transform - $(sourcePath)",
   "execution": {
-    "PowerShell": {
+    "PowerShell3": {
       "target": "$(currentDirectory)\\transform.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
