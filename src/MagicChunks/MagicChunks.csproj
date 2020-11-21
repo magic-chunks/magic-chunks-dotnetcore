@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;netstandard1.6;netstandard2.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Authors>Sergey Zwezdin</Authors>
     <Company />
@@ -15,7 +15,10 @@
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Configuration, Transform, JSON, XML, YAML, YML, web.config, app.config, appsetings.json</PackageTags>
   </PropertyGroup>
-
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="15.5.180" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />

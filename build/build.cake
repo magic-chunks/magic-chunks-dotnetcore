@@ -153,6 +153,7 @@ Task("Build")
 
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks" + "/bin/" + configuration + "/netstandard1.3/MagicChunks*.dll", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/netstandard1.6/MagicChunks.Cake.dll", paths.workingDirDotNet);
+        CopyFiles(paths.workingDirSolutionDir + "/MagicChunks.Cake" + "/bin/" + configuration + "/netstandard2.0/MagicChunks.Cake.dll", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/MSBuild/*.targets", paths.workingDirDotNet);
         CopyFiles(paths.workingDirSolutionDir + "/MagicChunks/Powershell/*.ps*", paths.workingDirDotNet);
     });
@@ -176,11 +177,13 @@ Task("PackNuget")
     .Does(() => {
         EnsureDirectoryExists(paths.workingDirNuget + "/netstandard1.3/MagicChunks");
         EnsureDirectoryExists(paths.workingDirNuget + "/netstandard1.6/MagicChunks");
-        
+        EnsureDirectoryExists(paths.workingDirNuget + "/netstandard2.0/MagicChunks");
+
         CopyFiles(resolveDirectoryPath(paths.workingDirSources + "/nuspecs") + "/*.nuspec", paths.workingDirNuget);
-        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");
-        DeleteFile(paths.workingDirNuget + "/netstandard1.3/MagicChunks/MagicChunks.Cake.dll");
+        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");        
         CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.6/MagicChunks");
+        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard2.0/MagicChunks");
+        DeleteFile(paths.workingDirNuget + "/netstandard1.3/MagicChunks/MagicChunks.Cake.dll");        
 
         foreach (string file in System.IO.Directory.EnumerateFiles(paths.workingDirNuget, "*.nuspec"))
         {

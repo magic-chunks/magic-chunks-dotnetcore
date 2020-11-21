@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Sergey Zwezdin</Authors>
     <Company />
     <Product>Magic Chunks</Product>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.23.0" />
+    <PackageReference Include="Cake.Core" Version="0.26.1" />
   </ItemGroup>
 
   <ItemGroup>
