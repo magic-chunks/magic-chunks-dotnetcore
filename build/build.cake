@@ -1,7 +1,7 @@
-#addin "Cake.Powershell"
+#addin nuget:?package=Cake.Npm&version=0.17.0
+#addin nuget:?package=Cake.Tfx&version=0.9.1
 #addin "Newtonsoft.Json"
 #tool "nuget:?package=ILRepack"
-
 // Helpers
 
 Func<string, string> resolveFilePath = (string source) => MakeAbsolute(File(source)).ToString();
@@ -180,10 +180,10 @@ Task("PackNuget")
         EnsureDirectoryExists(paths.workingDirNuget + "/netstandard2.0/MagicChunks");
 
         CopyFiles(resolveDirectoryPath(paths.workingDirSources + "/nuspecs") + "/*.nuspec", paths.workingDirNuget);
-        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");        
+        CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");
         CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.6/MagicChunks");
         CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard2.0/MagicChunks");
-        DeleteFile(paths.workingDirNuget + "/netstandard1.3/MagicChunks/MagicChunks.Cake.dll");        
+        DeleteFile(paths.workingDirNuget + "/netstandard1.3/MagicChunks/MagicChunks.Cake.dll");
 
         foreach (string file in System.IO.Directory.EnumerateFiles(paths.workingDirNuget, "*.nuspec"))
         {
@@ -202,9 +202,14 @@ Task("PackVSTS")
         CopyDirectory(paths.workingDirSolutionDir + "/MagicChunks/VSTS", paths.workingDirVSTS);
         CopyFiles(paths.workingDirDotNet + "/**/*.dll", paths.workingDirVSTS + "/MagicChunks");
 
-        StartPowershellFile(paths.workingDirVSTS + "/_build.ps1", new PowershellSettings {
-            WorkingDirectory = paths.workingDirVSTS
-        }.SetLogOutput());
+        NpmInstall(settings => settings.AddPackage("npm").InstallGlobally().WithLogLevel(NpmLogLevel.Silent));
+        NpmInstall(settings => settings.AddPackage("tfx-cli").InstallGlobally().WithLogLevel(NpmLogLevel.Silent));
+
+        TfxExtensionCreate(new TfxExtensionCreateSettings()
+        {
+            WorkingDirectory = paths.workingDirVSTS,
+            ManifestGlobs = new List<string>(){ paths.workingDirVSTS + "/vss-extension.json" }
+        });
     });
 
 
