@@ -1,7 +1,10 @@
 #addin nuget:?package=Cake.Npm&version=0.17.0
 #addin nuget:?package=Cake.Tfx&version=0.9.1
-#addin "Newtonsoft.Json"
-#tool "nuget:?package=ILRepack"
+
+#addin nuget:?package=Newtonsoft.Json&version=12.0.3
+
+#tool nuget:?package=ILRepack&version=2.0.18
+
 // Helpers
 
 Func<string, string> resolveFilePath = (string source) => MakeAbsolute(File(source)).ToString();
