@@ -1,9 +1,13 @@
+#addin nuget:?package=Cake.Git&version=0.22.0
 #addin nuget:?package=Cake.Npm&version=0.17.0
 #addin nuget:?package=Cake.Tfx&version=0.9.1
 
 #addin nuget:?package=Newtonsoft.Json&version=12.0.3
 
 #tool nuget:?package=ILRepack&version=2.0.18
+
+using System.Text.RegularExpressions;
+using System.Linq;
 
 // Helpers
 
@@ -14,8 +18,16 @@ Func<string, string> resolveDirectoryPath = (string source) => MakeAbsolute(Dire
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var version = Argument("versionnumber", "0.0.0");
-var versionbuild = Argument("versionbuild", "0");
+var versionbuild = EnvironmentVariable("appveyor_build_version", "0");
+
+var tags = GitTags(resolveDirectoryPath("./../"));
+var lastTag = tags.Last();
+var matches = Regex.Matches(lastTag.ToString(), "v([0-9\\.]+)", RegexOptions.IgnoreCase);
+var version = "0.0.0";
+if (matches[0].Success && matches[0].Groups.Count > 1)
+{
+    version = matches[0].Groups[1].Value;
+}
 
 // Variables
 
