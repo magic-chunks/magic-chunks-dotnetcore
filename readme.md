@@ -123,6 +123,12 @@ To transform config files you can use any approach you like:
 
 To learn more check [wiki page](https://github.com/sergeyzwezdin/magic-chunks/wiki).
 
+# Maintainers
+
+- Sergey Zwezdin ([@sergeyzwezdin](https://github.com/sergeyzwezdin))
+- Gary Ewan Park ([@gep13](https://github.com/gep13))
+- Pascal Berger ([@pascalberger](https://github.com/pascalberger))
+
 # Contributions
 
 Any contributions are welcome. Most probably someone will want to extend it with additional formats. So feel free to make pull requests for your changes. Read [contribution guidelines](https://github.com/sergeyzwezdin/magic-chunks/wiki/Contribution-guidelines) to start.
