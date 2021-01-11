@@ -1,0 +1,24 @@
+version: '{build}'
+branches:
+  only:
+  - master
+  - net-standard-migration
+image: Visual Studio 2019
+build_script:
+- ps: >-
+    cd build
+
+    ./build.ps1
+test_script:
+- ps: >-
+    cd ..\working\sources\src\MagicChunks.Tests
+
+
+    dotnet xunit
+artifacts:
+- path: working/dotnet/**/*.zip
+  name: dotnet
+- path: working/nuget/*.nupkg
+  name: nuget
+- path: working/vsts/**/*.vsix
+  name: vsts
