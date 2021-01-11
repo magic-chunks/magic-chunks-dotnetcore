@@ -7,10 +7,10 @@
     <Product>Magic Chunks</Product>
     <Description>Easy to use tool to config transformations for JSON, XML and YAML.</Description>
     <Copyright>(c) Sergey Zwezdin, 2017</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/sergeyzwezdin/magic-chunks</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/sergeyzwezdin/magic-chunks/master/logo/logo64.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/sergeyzwezdin/magic-chunks</RepositoryUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/logo/logo64.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Configuration, Transform, JSON, XML, YAML, YML, web.config, app.config, appsetings.json</PackageTags>
   </PropertyGroup>

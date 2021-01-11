@@ -1,4 +1,4 @@
-[![AppVeyor](https://img.shields.io/appveyor/ci/sergeyzwezdin/magic-chunks/master.svg?maxAge=2592000)](https://ci.appveyor.com/project/sergeyzwezdin/magic-chunks) [![Github Releases](https://img.shields.io/github/downloads/sergeyzwezdin/magic-chunks/total.svg?maxAge=2592000)](https://github.com/sergeyzwezdin/magic-chunks/releases) [![NuGet](https://img.shields.io/nuget/v/MagicChunks.svg?maxAge=2592000)](https://www.nuget.org/packages/MagicChunks/) [![Visual Studio Marketplace](https://img.shields.io/badge/VS%20Marketplace-1.3.1-yellowgreen.svg)](https://marketplace.visualstudio.com/items?itemName=sergeyzwezdin.magic-chunks)
+[![AppVeyor](https://img.shields.io/appveyor/ci/magic-chunks/magic-chunks-dotnetcore/master.svg?maxAge=2592000)](https://ci.appveyor.com/project/magic-chunks/magic-chunks-dotnetcore) [![Github Releases](https://img.shields.io/github/downloads/magic-chunks/magic-chunks-dotnetcore/total.svg?maxAge=2592000)](https://github.com/magic-chunks/magic-chunks-dotnetcore/releases) [![NuGet](https://img.shields.io/nuget/v/MagicChunks.svg?maxAge=2592000)](https://www.nuget.org/packages/MagicChunks/) [![Visual Studio Marketplace](https://img.shields.io/badge/VS%20Marketplace-1.3.1-yellowgreen.svg)](https://marketplace.visualstudio.com/items?itemName=sergeyzwezdin.magic-chunks)
 
 ![Magic Chunks](assets/title.png)
 
@@ -8,7 +8,7 @@ Easy to use tool to config transformations for JSON, XML and YAML.
 
 Everyone remember [XML Document Transform](https://msdn.microsoft.com/en-us/library/dd465326.aspx) syntax to transform configuration files during the build process. But world is changing and now you can have different config types in your .NET projects.
 
-**Magic Chunks** allows you to transform you JSON, XML and YAML files. You can run it at [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki/MSBuild), [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki/Cake), [PSake](https://github.com/sergeyzwezdin/magic-chunks/wiki/PSake) or [Powershell](https://github.com/sergeyzwezdin/magic-chunks/wiki/Powershell) script as well as use [Visual Studio Team Services build extension](https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension). Also, it's possible to reference Magic Chunks from your .NET projects in more complicated cases.
+**Magic Chunks** allows you to transform you JSON, XML and YAML files. You can run it at [MSBuild](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/MSBuild), [Cake](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Cake), [PSake](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/PSake) or [Powershell](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Powershell) script as well as use [Visual Studio Team Services build extension](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Visual-Studio-Team-System-extension). Also, it's possible to reference Magic Chunks from your .NET projects in more complicated cases.
 
 # How it works
 
@@ -85,9 +85,9 @@ After transformation you will have:
 
 Magic Chunks supports following file formats:
 
-1. [XML](https://github.com/sergeyzwezdin/magic-chunks/wiki/XML)
-2. [JSON](https://github.com/sergeyzwezdin/magic-chunks/wiki/JSON)
-3. [YAML](https://github.com/sergeyzwezdin/magic-chunks/wiki/YAML)
+1. [XML](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/XML)
+2. [JSON](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/JSON)
+3. [YAML](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/YAML)
 
 # Getting started
 
@@ -101,9 +101,9 @@ Let's say you have `appsettings.json` file at `C:\sources\project1` folder:
 }
 ```
 
-To use Magic Chunks download [latest release](https://github.com/sergeyzwezdin/magic-chunks/releases) manually or get it directly from [Nuget](http://nuget.org).
+To use Magic Chunks download [latest release](https://github.com/magic-chunks/magic-chunks-dotnetcore/releases) manually or get it directly from [Nuget](http://nuget.org).
 
-For example we will use Powershell to transform configuration file. To do this you have to write something like this: 
+For example we will use Powershell to transform configuration file. To do this you have to write something like this:
 
 ```powershell
 Import-Module .\MagicChunks.psm1
@@ -115,13 +115,13 @@ Format-MagicChunks -path C:\sources\project1\appsettings.json -transformations @
 
 To transform config files you can use any approach you like:
 
- - [MSBuild](https://github.com/sergeyzwezdin/magic-chunks/wiki/MSBuild)
- - [Cake](https://github.com/sergeyzwezdin/magic-chunks/wiki/Cake)
- - [Powershell](https://github.com/sergeyzwezdin/magic-chunks/wiki/Powershell)
- - [PSake](https://github.com/sergeyzwezdin/magic-chunks/wiki/PSake)
- - [VSTS extension](https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension)
+ - [MSBuild](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/MSBuild)
+ - [Cake](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Cake)
+ - [Powershell](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Powershell)
+ - [PSake](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/PSake)
+ - [VSTS extension](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Visual-Studio-Team-System-extension)
 
-To learn more check [wiki page](https://github.com/sergeyzwezdin/magic-chunks/wiki).
+To learn more check [wiki page](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki).
 
 # Maintainers
 
@@ -131,8 +131,8 @@ To learn more check [wiki page](https://github.com/sergeyzwezdin/magic-chunks/wi
 
 # Contributions
 
-Any contributions are welcome. Most probably someone will want to extend it with additional formats. So feel free to make pull requests for your changes. Read [contribution guidelines](https://github.com/sergeyzwezdin/magic-chunks/wiki/Contribution-guidelines) to start.
+Any contributions are welcome. Most probably someone will want to extend it with additional formats. So feel free to make pull requests for your changes. Read [contribution guidelines](https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Contribution-guidelines) to start.
 
 # License
 
-Magic Chunks is released under the [MIT License](https://github.com/sergeyzwezdin/magic-chunks/blob/master/LICENSE).
+Magic Chunks is released under the [MIT License](https://github.com/magic-chunks/magic-chunks-dotnetcore/blob/master/LICENSE).
