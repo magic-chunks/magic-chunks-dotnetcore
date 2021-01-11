@@ -3,7 +3,7 @@
   "name": "MagicChunks",
   "friendlyName": "Config transformation",
   "description": "Transform config file with Magic Chunks",
-  "helpMarkDown": "[More Information](https://github.com/sergeyzwezdin/magic-chunks)",
+  "helpMarkDown": "[More Information](https://github.com/magic-chunks/magic-chunks-dotnetcore)",
   "category": "Utility",
   "visibility": [
     "Build",

@@ -73,16 +73,16 @@
     ],
     "links": {
         "getstarted": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki/Visual-Studio-Team-System-extension"
+            "uri": "https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki/Visual-Studio-Team-System-extension"
         },
         "learn": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/wiki"
+            "uri": "https://github.com/magic-chunks/magic-chunks-dotnetcore/wiki"
         },
         "support": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/issues"
+            "uri": "https://github.com/magic-chunks/magic-chunks-dotnetcore/issues"
         },
         "license": {
-            "uri": "https://github.com/sergeyzwezdin/magic-chunks/blob/master/LICENSE"
+            "uri": "https://github.com/magic-chunks/magic-chunks-dotnetcore/blob/master/LICENSE"
         }
     },
     "branding": {
