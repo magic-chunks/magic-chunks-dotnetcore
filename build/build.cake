@@ -155,7 +155,7 @@ Task("Build")
     .Does(() => {
         MSBuild(paths.workingDirSolutionPath, new MSBuildSettings {
             Verbosity = Verbosity.Minimal,
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.VS2019,
             Configuration = configuration,
             PlatformTarget = PlatformTarget.MSIL,
         }.WithTarget("Build"));
