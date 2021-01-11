@@ -9,6 +9,7 @@
         <license type="expression">MIT</license>
         <repository type="git" url="https://github.com/magic-chunks/magic-chunks-dotnetcore.git"/>
         <projectUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</projectUrl>
+        <icon>logo64.png</icon>
         <iconUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/logo/logo64.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Easy to use tool to config transformations for JSON, XML and YAML.</description>
@@ -29,5 +30,6 @@
         <file src="netstandard2.0\MagicChunks\MagicChunks.Cake.dll" target="lib\netstandard2.0" />
         <file src="netstandard2.0\MagicChunks\MagicChunks.targets" target="lib\netstandard2.0" />
         <file src="netstandard2.0\MagicChunks\MagicChunks.psm1" target="lib\netstandard2.0" />
+        <file src="logo64.png" target="" />
     </files>
 </package>

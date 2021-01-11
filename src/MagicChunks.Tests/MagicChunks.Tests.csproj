@@ -10,6 +10,7 @@
     <Copyright>(c) Sergey Zwezdin, 2017</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</PackageProjectUrl>
+    <PackageIcon>logo64.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/logo/logo64.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
@@ -17,6 +18,14 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+      <None Include="../../logo/logo64.png">
+          <Pack>True</Pack>
+          <PackagePath></PackagePath>
+      </None>
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
