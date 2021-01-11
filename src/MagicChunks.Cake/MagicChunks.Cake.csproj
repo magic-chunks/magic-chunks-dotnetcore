@@ -7,7 +7,7 @@
     <Product>Magic Chunks</Product>
     <Description>Easy to use tool to config transformations for JSON, XML and YAML.</Description>
     <Copyright>(c) Sergey Zwezdin, 2017</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/magic-chunks/magic-chunks-dotnetcore/master/logo/logo64.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/magic-chunks/magic-chunks-dotnetcore</RepositoryUrl>
