@@ -194,6 +194,7 @@ Task("PackNuget")
         EnsureDirectoryExists(paths.workingDirNuget + "/netstandard1.6/MagicChunks");
         EnsureDirectoryExists(paths.workingDirNuget + "/netstandard2.0/MagicChunks");
 
+        CopyFile(paths.root + "/logo/logo64.png", paths.workingDirNuget + "/logo64.png");
         CopyFiles(resolveDirectoryPath(paths.workingDirSources + "/nuspecs") + "/*.nuspec", paths.workingDirNuget);
         CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.3/MagicChunks");
         CopyFiles(paths.workingDirDotNet + "/**/*.*", paths.workingDirNuget + "/netstandard1.6/MagicChunks");
