@@ -111,26 +111,40 @@ c: 3
         public void ValidateEmptyPath()
         {
             // Assert
-            YamlDocument document = new YamlDocument("");
+            var document = new YamlDocument(@"a:
+    x: 1
+b: 2
+c: 3");
 
             // Act
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "", "b" }, ""));
 
             // Arrange
-            Assert.True(result.Message?.StartsWith("There is empty items in the path."));
+            Assert.True(result.Message?.StartsWith("There is at least one empty segment in the path."));
         }
 
         [Fact]
         public void ValidateWithespacePath()
         {
             // Assert
-            YamlDocument document = new YamlDocument("");
+            var document = new YamlDocument(@"a:
+    x: 1
+b: 2
+c: 3");
 
             // Act
             ArgumentException result = Assert.Throws<ArgumentException>(() => document.ReplaceKey(new[] { "a", "   ", "b" }, ""));
 
             // Arrange
-            Assert.True(result.Message?.StartsWith("There is empty items in the path."));
+            Assert.True(result.Message?.StartsWith("There is at least one empty segment in the path."));
+        }
+
+        [Fact]
+        public void ConstructorThrowsErrorIfDocumentHasNoRoot()
+        {
+            ArgumentException result = Assert.Throws<ArgumentException>(() => new YamlDocument(""));
+
+            Assert.True(result.Message?.StartsWith("Root element is not present."));
         }
     }
 }

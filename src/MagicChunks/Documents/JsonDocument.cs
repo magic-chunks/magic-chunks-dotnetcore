@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MagicChunks.Documents
 {
-    public class JsonDocument : IDocument
+    public class JsonDocument : Document, IDocument
     {
         private static readonly Regex JsonObjectRegex = new Regex(@"^{.+}$$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
         private static readonly Regex NodeIndexEndingRegex = new Regex(@"\[\d+\]$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
@@ -21,6 +21,9 @@ namespace MagicChunks.Documents
             try
             {
                 Document = (JObject)JsonConvert.DeserializeObject(source);
+
+                if (Document.Root == null)
+                    throw new ArgumentException("Root element is not present.", nameof(source));
             }
             catch (JsonReaderException ex)
             {
@@ -30,17 +33,7 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            if (Document.Root == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             foreach (var target in targets)
             {
@@ -50,17 +43,7 @@ namespace MagicChunks.Documents
 
         public void ReplaceKey(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            if (Document.Root == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             foreach (var target in targets)
             {
@@ -70,17 +53,7 @@ namespace MagicChunks.Documents
 
         public void RemoveKey(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            if (Document.Root == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
-            var pathEnding = path.Last();
+            (var targets, var pathEnding) = Process(path);
 
             if (NodeIndexEndingRegex.IsMatch(pathEnding) || NodeValueEndingRegex.IsMatch(pathEnding))
             {
@@ -101,6 +74,16 @@ namespace MagicChunks.Documents
                     target.Remove(pathEnding);
                 }
             }
+        }
+
+        private (IEnumerable<JObject>, string) Process(string[] path)
+        {
+            ValidatePath(path);
+
+            var targets = FindPath(path.Take(path.Length - 1), (JObject)Document.Root);
+            var pathEnding = path.Last();
+
+            return (targets, pathEnding);
         }
 
         private static IEnumerable<JObject> FindPath(IEnumerable<string> path, JObject current)
@@ -185,5 +168,6 @@ namespace MagicChunks.Documents
         public void Dispose()
         {
         }
+
     }
 }

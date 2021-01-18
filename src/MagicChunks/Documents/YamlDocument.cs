@@ -9,7 +9,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace MagicChunks.Documents
 {
-    public class YamlDocument : IDocument
+    public class YamlDocument : Document, IDocument
     {
         protected readonly Dictionary<object, object> Document;
 
@@ -25,6 +25,10 @@ namespace MagicChunks.Documents
                 try
                 {
                     Document = (Dictionary<object, object>)deserializer.Deserialize(reader);
+
+                    if (Document == null)
+                        throw new ArgumentException("Root element is not present.", nameof(source));
+
                 }
                 catch (YamlException ex)
                 {
@@ -35,55 +39,24 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            Dictionary<object, object> current = Document;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            current = FindPath(path.Take(path.Length - 1), current);
-
-            UpdateTargetArrayElement(current, path.Last(), value);
+            UpdateTargetArrayElement(Process(path), path.Last(), value);
         }
 
         public void ReplaceKey(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            Dictionary<object, object> current = Document;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            current = FindPath(path.Take(path.Length - 1), current);
-
-            UpdateTargetElement(current, path.Last(), value);
+            UpdateTargetElement(Process(path), path.Last(), value);
         }
 
         public void RemoveKey(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+            Process(path).Remove(path.Last());
+        }
 
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            Dictionary<object, object> current = Document;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            current = FindPath(path.Take(path.Length - 1), current);
-            current.Remove(path.Last());
+        private Dictionary<object, object> Process(string[] path)
+        {
+            ValidatePath(path);
+            var current = FindPath(path.Take(path.Length - 1), Document);
+            return current;
         }
 
         private static Dictionary<object, object> FindPath(IEnumerable<string> path, Dictionary<object, object> current)

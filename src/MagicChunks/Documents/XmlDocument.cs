@@ -9,7 +9,7 @@ using MagicChunks.Helpers;
 
 namespace MagicChunks.Documents
 {
-    public class XmlDocument : IDocument
+    public class XmlDocument : Document, IDocument
     {
         private static readonly Regex AttributeFilterRegex = new Regex(@"(?<element>.+?)\[\s*\@(?<key>[\w\:]+)\s*\=\s*[\'\""]?(?<value>.+?)[\'\""]?\s*\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
         private static readonly Regex ProcessingInstructionsPathElementRegex = new Regex(@"^\?.+", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -32,24 +32,10 @@ namespace MagicChunks.Documents
 
         public void AddElementToArray(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
-
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            XElement current = Document.Root;
-            string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
-                throw new ArgumentException("Root element name does not match path.", nameof(path));
-
-            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+            (var match, var documentNamespace) = ProcessAndMatch(path);
+            if (!match)
             {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
+                var current = FindPath(path.Skip(1).Take(path.Length - 2), Document.Root, documentNamespace) as XElement;
                 UpdateTargetArrayElement(value, path.Last(), current, documentNamespace);
             }
             else
@@ -60,24 +46,11 @@ namespace MagicChunks.Documents
 
         public void ReplaceKey(string[] path, string value)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+            (var match, var documentNamespace) = ProcessAndMatch(path);
 
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
-
-            XElement current = Document.Root;
-            string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
-
-            if (current == null)
-                throw new ArgumentException("Root element is not present.", nameof(path));
-
-            if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
-                throw new ArgumentException("Root element name does not match path.", nameof(path));
-
-            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
+            if (!match)
             {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
+                var current = FindPath(path.Skip(1).Take(path.Length - 2), Document.Root, documentNamespace) as XElement;
                 UpdateTargetElement(value, path.Last(), current, documentNamespace);
             }
             else
@@ -97,18 +70,35 @@ namespace MagicChunks.Documents
                     throw new ArgumentException("To update processing instruction you should point attribute name.", nameof(path));
                 }
 
-                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XProcessingInstruction;
+                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), Document.Root, documentNamespace) as XProcessingInstruction;
                 UpdateProcessingInstruction(value, path.Last().TrimStart('@'), processingInstruction, documentNamespace);
             }
         }
 
         public void RemoveKey(string[] path)
         {
-            if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not specified.", nameof(path));
+            (var match, var documentNamespace) = ProcessAndMatch(path);
 
-            if (path.Any(String.IsNullOrWhiteSpace))
-                throw new ArgumentException("There is empty items in the path.", nameof(path));
+            if (!match)
+            {
+                var current = FindPath(path.Skip(1).Take(path.Length - 2), Document.Root, documentNamespace) as XElement;
+                RemoveTargetElement(path.Last(), current, documentNamespace);
+            }
+            else
+            {
+                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), Document.Root, documentNamespace) as XProcessingInstruction;
+
+                // Remove whole processing instruction (not just single attribute)
+                if (processingInstruction == null)
+                    processingInstruction = FindPath(path.Skip(1).Take(path.Length - 1), Document.Root, documentNamespace) as XProcessingInstruction;
+
+                RemoveProcessingInstruction(path.Last(), processingInstruction, documentNamespace);
+            }
+
+        }
+        private (bool, string) ProcessAndMatch(string[] path)
+        {
+            ValidatePath(path);
 
             XElement current = Document.Root;
             string documentNamespace = Document.Root?.Name.NamespaceName ?? String.Empty;
@@ -119,21 +109,7 @@ namespace MagicChunks.Documents
             if (String.Compare(current.Name.LocalName, path.First(), StringComparison.OrdinalIgnoreCase) != 0)
                 throw new ArgumentException("Root element name does not match path.", nameof(path));
 
-            if (!path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)))
-            {
-                current = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XElement;
-                RemoveTargetElement(path.Last(), current, documentNamespace);
-            }
-            else
-            {
-                var processingInstruction = FindPath(path.Skip(1).Take(path.Length - 2), current, documentNamespace) as XProcessingInstruction;
-
-                // Remove whole processing instruction (not just single attribute)
-                if (processingInstruction == null)
-                    processingInstruction = FindPath(path.Skip(1).Take(path.Length - 1), current, documentNamespace) as XProcessingInstruction;
-
-                RemoveProcessingInstruction(path.Last(), processingInstruction, documentNamespace);
-            }
+            return (path.Any(p => ProcessingInstructionsPathElementRegex.IsMatch(p)), documentNamespace);
         }
 
         private static XNode FindPath(IEnumerable<string> path, XElement current, string documentNamespace)
