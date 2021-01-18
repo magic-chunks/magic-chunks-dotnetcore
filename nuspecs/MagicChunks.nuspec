@@ -17,7 +17,11 @@
         <copyright>Copyright © Sergey Zwezdin</copyright>
         <tags>Configuration Transform JSON XML YAML YML web.config app.config appsetings.json</tags>
         <releaseNotes>https://github.com/magic-chunks/magic-chunks-dotnetcore/releases/</releaseNotes>
-        <dependencies></dependencies>
+        <dependencies>
+            <group targetFramework=".NETStandard1.3" />
+            <group targetFramework=".NETStandard1.6" />
+            <group targetFramework=".NETStandard2.0" />
+        </dependencies>
     </metadata>
     <files>
         <file src="netstandard1.3\MagicChunks\MagicChunks.*" target="lib\netstandard1.3" />
