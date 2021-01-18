@@ -184,7 +184,7 @@ namespace MagicChunks.Documents
 
             if (targetElement.StartsWith("@") == true)
             {   // Attriubte update
-                current.SetAttributeValue(targetElement.TrimStart('@').GetNameWithNamespace(current, String.Empty), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">"));
+                current.SetAttributeValue(targetElement.TrimStart('@').GetNameWithNamespace(current, String.Empty), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">").Replace("&amp;quot;", @"&quot;").Replace("&amp;lt;", @"&lt;").Replace("&amp;gt;", @"&gt;"));
             }
             else if (!attributeFilterMatch.Success)
             {   // Property update
