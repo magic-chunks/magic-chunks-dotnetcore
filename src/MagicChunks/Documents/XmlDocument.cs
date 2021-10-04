@@ -33,7 +33,7 @@ namespace MagicChunks.Documents
         public void AddElementToArray(string[] path, string value)
         {
             if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+                throw new ArgumentException("Path is not specified.", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
@@ -61,7 +61,7 @@ namespace MagicChunks.Documents
         public void ReplaceKey(string[] path, string value)
         {
             if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+                throw new ArgumentException("Path is not specified", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
@@ -183,7 +183,7 @@ namespace MagicChunks.Documents
             var attributeFilterMatch = AttributeFilterRegex.Match(targetElement);
 
             if (targetElement.StartsWith("@") == true)
-            {   // Attriubte update
+            {   // Attribute update
                 current.SetAttributeValue(targetElement.TrimStart('@').GetNameWithNamespace(current, String.Empty), value.Replace("&quot;", @"""").Replace("&lt;", @"<").Replace("&gt;", @">"));
             }
             else if (!attributeFilterMatch.Success)
@@ -267,7 +267,7 @@ namespace MagicChunks.Documents
             var attributeFilterMatch = AttributeFilterRegex.Match(targetElement);
 
             if (targetElement.StartsWith("@") == true)
-            {   // Attriubte update
+            {   // Attribute update
                 current.Attribute(XName.Get(targetElement.TrimStart('@')))
                     ?.Remove();
             }
@@ -310,7 +310,7 @@ namespace MagicChunks.Documents
             }
         }
 
-        
+
         public override string ToString()
         {
             return Document?.ToStringWithDeclaration() ?? String.Empty;
