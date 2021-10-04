@@ -55,7 +55,7 @@ try {
         }
     }
 
-    foreach($t in ($transformations.Replace("\", "\\") | ConvertFrom-Json).psobject.properties) {
+    foreach($t in ($transformations | ConvertFrom-Json).psobject.properties) {
         Write-Host "Transformation found: $($t.name): $($t.value)"
         $transforms.Add($t.name, $t.value)
     }
