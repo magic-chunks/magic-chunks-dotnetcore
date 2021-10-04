@@ -31,7 +31,7 @@ namespace MagicChunks.Documents
         public void AddElementToArray(string[] path, string value)
         {
             if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+                throw new ArgumentException("Path is not specified.", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
@@ -51,7 +51,7 @@ namespace MagicChunks.Documents
         public void ReplaceKey(string[] path, string value)
         {
             if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+                throw new ArgumentException("Path is not specified.", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
@@ -71,7 +71,7 @@ namespace MagicChunks.Documents
         public void RemoveKey(string[] path)
         {
             if ((path == null) || (path.Any() == false))
-                throw new ArgumentException("Path is not speicified.", nameof(path));
+                throw new ArgumentException("Path is not specified.", nameof(path));
 
             if (path.Any(String.IsNullOrWhiteSpace))
                 throw new ArgumentException("There is empty items in the path.", nameof(path));
