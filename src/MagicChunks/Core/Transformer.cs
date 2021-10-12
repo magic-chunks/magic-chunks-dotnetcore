@@ -9,10 +9,7 @@ namespace MagicChunks.Core
 {
     public class Transformer : ITransformer
     {
-        private static readonly Regex RemoveEndingRegex = new Regex(@"\`\d+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
-        private static readonly Regex RemoveArrayEndingRegex = new Regex(@"\[\]$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
+        
         private static readonly IEnumerable<Type> _documentTypes;
 
         static Transformer()
@@ -81,35 +78,31 @@ namespace MagicChunks.Core
                     if (String.IsNullOrWhiteSpace(key))
                         throw new ArgumentNullException("Transformation key is empty.", nameof(transformations));
 
-                    source.RemoveKey(SplitKey(key));
+                    source.RemoveKey(TransformationKey.Split(key));
                 }
             }
 
             foreach (var transformation in transformations)
             {
-                if (String.IsNullOrWhiteSpace(transformation.Key))
-                    throw new ArgumentException("Transformation key is empty.", nameof(transformations));
+                var transformationKey = new TransformationKey(transformation.Key);
 
-                if (transformation.Key.StartsWith("#"))
+                switch (transformationKey.Type)
                 {
-                    source.RemoveKey(SplitKey(transformation.Key.TrimStart('#')));
-                }
-                else if (RemoveEndingRegex.Replace(transformation.Key, String.Empty).EndsWith("[]"))
-                {
-                    source.AddElementToArray(SplitKey(transformation.Key), transformation.Value);
-                }
-                else
-                {
-                    source.ReplaceKey(SplitKey(transformation.Key), transformation.Value);
+                    case TransformationKeyType.Remove:
+                        source.RemoveKey(transformationKey.Path);
+                        break;
+                    case TransformationKeyType.AddToArray:
+                        source.AddElementToArray(transformationKey.Path, transformation.Value);
+                        break;
+                    case TransformationKeyType.Replace:
+                        source.ReplaceKey(transformationKey.Path, transformation.Value);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Action is not defined for {nameof(TransformationKeyType)}.{transformationKey.Type}");
                 }
             }
 
             return source.ToString();
-        }
-
-        private static string[] SplitKey(string key)
-        {
-            return RemoveArrayEndingRegex.Replace(RemoveEndingRegex.Replace(key.Trim(), String.Empty), String.Empty).Split('/').Select(x => x.Trim()).ToArray();
         }
 
         public void Dispose()
