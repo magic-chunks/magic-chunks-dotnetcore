@@ -14,7 +14,7 @@ test_script:
     cd ..\working\sources\src\MagicChunks.Tests
 
 
-    dotnet xunit
+    dotnet test
 artifacts:
 - path: working/dotnet/**/*.zip
   name: dotnet
