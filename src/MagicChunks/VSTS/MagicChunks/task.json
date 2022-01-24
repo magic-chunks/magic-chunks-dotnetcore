@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "985284E0-A7D2-4E4D-802C-0A516BFFAADF",
   "name": "MagicChunks",
   "friendlyName": "Config transformation",
@@ -134,7 +134,7 @@
   ],
   "instanceNameFormat": "Config transform - $(sourcePath)",
   "execution": {
-    "PowerShell": {
+    "PowerShell3": {
       "target": "$(currentDirectory)\\transform.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
